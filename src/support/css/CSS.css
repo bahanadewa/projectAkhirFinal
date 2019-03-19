@@ -1,0 +1,10 @@
+.img{
+ background-image: url("../img/cupcake-icing-wallpaper.jpg");
+ height: 750px;
+ background-position: center;
+ background-size: cover;
+}
+.background{
+    background-color:whitesmoke;
+    
+}
