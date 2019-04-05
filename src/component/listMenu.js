@@ -2,6 +2,10 @@ import React from 'react'
 import { urlAPI } from '../support/url-API';
 import Axios from 'axios'
 import {Link} from 'react-router-dom'
+import {connect} from 'react-redux'
+import swal from 'sweetalert'
+import {cartCount} from '../1 action'
+
 
 
 class Product extends React.Component {
@@ -16,6 +20,35 @@ class Product extends React.Component {
         Axios.get(urlAPI+"/product-menu")
         .then((res) => this.setState({listProduct :res.data}))
         .catch ((err)=> console.log(err))
+    }
+
+    addproduct = (obj)=> {
+        var product_quantity = 1
+        var product_idUser = this.props.id
+        var product_username = this.props.username
+        var product_name = obj.name
+        var product_price = obj.price
+        var product_category = obj.category
+        var product_img = obj.img
+        var product_id = obj.id
+        var product_discount = obj.discount
+
+        var newdata ={product_idUser,product_username,product_name,product_price,
+                        product_category,product_img,product_id,product_quantity,product_discount}
+                        
+        Axios.get(urlAPI + '/cart?product_name=' + newdata.product_name + '&idUser=' + this.props.id).then((res) => {
+            if(res.data.length > 0){
+                Axios.put(urlAPI + '/cart/' + res.data[0].id, {...newdata, product_quantity: parseInt(res.data[0].product_quantity) + newdata.product_quantity })
+                swal('Status Add' , 'Success Add to Cart' , 'success')
+            }else{
+                Axios.post(urlAPI + '/cart',newdata)
+                .then((res) => {
+                    swal('Status Add' , 'Success Add to Cart' , 'success')
+                    this.props.cartCount(this.props.username)
+                })
+                .catch((err) => console.log(err))
+            }
+        })
     }
 
 
@@ -69,10 +102,11 @@ class Product extends React.Component {
                         <p className="card-text" style={{textDecoration:"line-through", color:'red',display:"inline"}}> Rp {val.price}</p> 
                         : null
                         }
+
+
                         <p className="card-text" style={{display:"inline",fontWeight:'500'}}> Rp {val.price- (val.price*val.discount/100)} </p>
-                        <Link to={'/detail-menu/'+val.id}>
-                            <button className="d-block btn btn-info mt-2"  style={{height:"34px", width:"100%"}}> <i class="fas fa-cart-arrow-down"></i> add to cart </button>
-                        </Link>
+                        <button className="d-block btn btn-info mt-2" onClick={()=> this.addproduct(val)}  style={{height:"34px", width:"100%"}}> <i class="fas fa-cart-arrow-down"></i> add to cart </button>
+                        
                     </div>
                 </div>
             )
@@ -92,4 +126,11 @@ class Product extends React.Component {
     }
 }
 
-export default Product
+const mapStateToProps = (state) => {
+    return{
+        id : state.user.id,
+        username : state.user.user_name
+    }
+}
+
+export default connect (mapStateToProps,{cartCount}) (Product)

@@ -3,6 +3,7 @@ import Axios from 'axios'
 import { urlAPI } from '../support/url-API'
 import {connect} from 'react-redux';
 import swal from "sweetalert";
+import {cartCount} from '../1 action'
 
 class ProductDetail extends React.Component{
     state = {productname : {} }
@@ -45,7 +46,9 @@ class ProductDetail extends React.Component{
         var product_category = this.state.productname.category
         var product_img = this.state.productname.img
         var product_id = this.state.productname.id
-        var newdata = {product_idUser , product_username, product_name,product_price, product_category,product_img,product_id,product_quantity}
+        var product_discount = this.state.productname.discount
+        
+        var newdata = {product_idUser , product_username, product_name,product_price, product_category,product_img,product_id,product_quantity,product_discount}
 
         Axios.get(urlAPI+'/cart?product_idUser='+this.props.id+"&product_id="+newdata.product_id)
         .then((res)=>{
@@ -65,7 +68,8 @@ class ProductDetail extends React.Component{
                     title: "Add to cart success",
                     text: "Add to cart success",
                     icon: "success",
-                  });
+                  })
+                  this.props.cartCount(this.props.user)
             }
         })
         .catch((err)=>{
@@ -164,4 +168,4 @@ const  mapStateToProps =(state)=>{
     }
 }
 
-export default connect (mapStateToProps)(ProductDetail);
+export default connect (mapStateToProps,{cartCount})(ProductDetail);

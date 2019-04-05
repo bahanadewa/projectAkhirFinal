@@ -39,6 +39,12 @@ export const login =(paramsUserName,paramsPassword)=>{
     }
 }
 
+export const cookieChecked = () => {
+    return {
+        type : 'COOKIE_CHECKED'
+    }
+}
+
 export const keepLogIn = (cookie)=>{
     return(dispatch) => {
         axios.get(urlAPI + '/user',{params :{username : cookie}})

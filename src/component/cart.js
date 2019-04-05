@@ -18,11 +18,17 @@ import Axios from 'axios';
 import { urlAPI } from '../support/url-API';
 import {Button,Icon,Input,Label} from 'semantic-ui-react';
 import swal from "sweetalert";
+import {Link} from 'react-router-dom'
 import {connect} from 'react-redux'
 import PageNotFound from './404'
 import cookie from 'universal-cookie'
-// import PageNotFound from '../pageNotFound'
+import {cartCount,resetCount} from '../1 action'
 
+
+
+function formatMoney(number) {
+  return number.toLocaleString('in-RP', { style: 'currency', currency: 'IDR' });
+}
 
 const actionsStyles = theme => ({
   root: {
@@ -124,8 +130,8 @@ class CustomPaginationActionsTable extends React.Component {
     rows: [],
     page: 0,
     rowsPerPage: 5,
-    isEdit : false,
-    editItem : {}
+    edit : -1,
+    total : 0
   };
 
   componentDidMount(){
@@ -143,183 +149,188 @@ class CustomPaginationActionsTable extends React.Component {
     this.setState({ page });
   };
 
-  onBtnDelete = (id)=>{
-        Axios.delete(urlAPI+'/cart/'+id)
-        .then((res)=>{
-            this.getDataApi()
-        })
-        .catch((err)=> console.log(err))
-  }
-
-
-  btnEDIT = (param) =>{
-      this.setState({isEdit:true, editItem : param})
-  }
-
-  btnCANCEL = (param) =>{
-    this.setState({isEdit:false , editItem:param})
-    
-  }
-
-  BtnSave = ()=>{
-      
-      var product_name = this.state.editItem.product_name
-      var product_img = this.state.editItem.product_img
-      var product_category = this.state.editItem.product_category
-      var product_quantity = this.quantityEdit.inputRef.value === ""? this.state.editItem.product_quantity : this.quantityEdit.inputRef.value
-      var product_price = this.state.editItem.product_price
-     
-     var newData = {product_name,product_img,product_category,product_quantity,product_price}
-
-    Axios.put(urlAPI+'/cart/'+this.state.editItem.id, newData)
-    .then((res) =>{
-        this.getDataApi()
-        swal('edit status','edit product success','success')
-        this.setState({isEdit:false, editItem: {}})
-    })
-    .catch ((err) => {console.log(err)})
-  }
-
-
-  renderJsx =()=>{
-      var jsx = this.state.rows.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage).map((val)=>{
-          return(
-            <TableRow key = {val.id}>
-                <TableCell component="th" scope="row">
-                    {val.id}
-                </TableCell>
-                <TableCell align="">{val.product_name}</TableCell>
-                <TableCell align=""><img src={val.product_img} width="50px"/></TableCell>
-                <TableCell align="">{val.product_category}</TableCell>
-                <TableCell align="">{val.product_price}</TableCell>
-                <TableCell align="">{val.product_quantity}</TableCell>
-                <TableCell align="">{val.product_price * val.product_quantity}</TableCell>
-                
-                
-                <TableCell>
-                        <Button onClick={()=>this.btnEDIT(val)} animated color="teal">
-                            <Button.Content visible>Edit</Button.Content>
-                            <Button.Content hidden>
-                                <Icon name='edit' />
-                            </Button.Content>
-                        </Button>
-
-                        <Button animated color="red" onClick={()=>this.onBtnDelete(val.id)}>
-                            <Button.Content visible>Delete</Button.Content>
-                            <Button.Content hidden>
-                                <Icon name='delete' />
-                            </Button.Content>
-                        </Button>
-                </TableCell>
-            </TableRow>
-          )
-      })
-      return jsx
-    }; 
-
   handleChangeRowsPerPage = event => {
     this.setState({ page: 0, rowsPerPage: event.target.value });
   };
 
+  onBtnDelete = (id)=>{
+        var getcookie = objcookie.get('memory-cookie')
+        Axios.delete(urlAPI+'/cart/'+id)
+        .then((res)=>{
+          swal({
+            title: "Deleted",
+            text: "Item deleted",
+            icon: "success",
+          });
+            this.getDataApi()
+            this.props.cartCount(getcookie)
+        })
+        .catch((err)=> console.log(err))
+  }
 
+  qtyValidation = () => {
+    if(this.refs.qtyEdit.value < 1) {
+        this.refs.qtyEdit.value = 1
+    }
+}
+
+  onBtnSave =(obj) => {
+    Axios.put(urlAPI+'/cart/' + obj.id, {...obj , product_quantity : this.refs.qtyEdit.value})
+    .then((res) => {
+      swal({
+        title: "",
+        text: "",
+        icon: "success",
+      });
+      this.getDataApi()
+      this.setState({edit : -1})
+    })
+    .catch((err) => console.log(err))
+  }
+
+
+  totalHarga = () => {
+    var sum = 0
+    for(var i = 0 ; i< this.state.rows.length ; i ++){
+        sum+= ((this.state.rows[i].product_price - (this.state.rows[i].product_price*(this.state.rows[i].product_discount/100)))*this.state.rows[i].product_quantity)
+    }
+    return sum
+  }
+
+
+  getItem = () => {
+    var arr = []
+    for(var i = 0 ; i < this.state.rows.length ; i++){
+      var data = {product_name : this.state.rows[i].product_name , product_price : this.state.rows[i].product_price, product_quantity : this.state.rows[i].product_quantity, product_discount : this.state.rows[i].product_discount}
+      arr.push(data)
+    }
+    return arr
+  }
+
+  deleteCart = () => {
+    for(var i = 0 ; i < this.state.rows.length ; i++){
+      Axios.delete(urlAPI + '/cart/' + this.state.rows[i].id)
+      .then((res) => {
+        this.props.resetCount()
+        this.getDataApi()
+      })
+    }
+  }
+
+  onCheckout =() => {
+    var date = new Date()
+    var newData = {
+      product_idUser : this.props.id,
+      product_username : this.props.user,
+      tanggal : date.getDate() + ':' + date.getMonth() + ':' + date.getFullYear() + '->' +date.getHours()+':'+date.getMinutes()+ ":"+date.getSeconds(),
+      total : this.totalHarga(),
+      item : this.getItem()
+    }
+
+    Axios.post(urlAPI + '/history' , newData)
+    .then((res) => {
+      swal('Checkout Status' , 'Success','success')
+      this.deleteCart()
+    })
+  }
 
 
   render() {
     const { classes } = this.props;
     const { rows, rowsPerPage, page } = this.state;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
-    var {product_quantity, img, serving,calories,fat,protein,carb,fiber,category,price,discount} = this.state.editItem
-    if (this.props.role === "user" | this.props.role === "admin")
-    {
-    return (
-        <div className="container">
-                <Paper className={classes.root}>
-                    <div className={classes.tableWrapper}>
-                        <Table className={classes.table}>
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell style={{fontSize :'16px',fontWeight:"600px"}}>ID</TableCell>
-                                    <TableCell style={{fontSize :'16px',fontWeight:"600px"}}>NAME</TableCell>
-                                    <TableCell style={{fontSize :'16px',fontWeight:"600px"}}>IMG</TableCell>
-                                    <TableCell style={{fontSize :'16px',fontWeight:"600px"}}>CATEGORY</TableCell>
-                                    <TableCell style={{fontSize :'16px',fontWeight:"600px"}}>PRICE</TableCell>
-                                    <TableCell style={{fontSize :'16px',fontWeight:"600px"}}>QUANTITIES</TableCell>
-                                    <TableCell style={{fontSize :'16px',fontWeight:"600px"}}>TOTAL</TableCell>
-                                </TableRow>
-                            </TableHead>
-
-                            <TableBody>
-                                {this.renderJsx()}
-                          
-                            {emptyRows > 0 && (
-                                <TableRow style={{ height: 50 * emptyRows }}>
-                                <TableCell colSpan={6} />
-                                </TableRow>
-                            )}
-                            </TableBody>
-                            <TableFooter>
-                            <TableRow>
-                                <TablePagination
-                                rowsPerPageOptions={[5, 10, 25]}
-                                colSpan={3}
-                                count={rows.length}
-                                rowsPerPage={rowsPerPage}
-                                page={page}
-                                SelectProps={{
-                                    native: true,
-                                }}
-                                onChangePage={this.handleChangePage}
-                                onChangeRowsPerPage={this.handleChangeRowsPerPage}
-                                ActionsComponent={TablePaginationActionsWrapped}
-                                />
-                            </TableRow>
-                            </TableFooter>
-                        </Table>
+    if(this.props.cart == 0 && this.props.id > 0){
+      return (
+        <div className='container'>
+        <Paper className='mt-4'>
+                <div className='row justify-content-center p-4'>
+                    <div className='col-md-4'>
+                       <Link to='/'> <input type='button' className='btn btn-success' value='Your Cart is Empty, Continue Shopping' /></Link>
                     </div>
-                </Paper>
-                {/* ========================================== EDIT PRODUCT SECTION ================================================== */}
-                {
-                  this.state.isEdit === true ?
-                  <Paper className="mt-5">
-                      <Table>
-                          <TableHead>
-                              <TableRow>
-                              <TableCell style={{fontSize :'24px',fontWeight:"600px"}}>EDIT PRODUCT{" ( "+product_quantity+" )"}</TableCell>
-                              </TableRow>
+                </div>
+          </Paper>
+          </div>
+      )
+    }
+    if(this.props.id > 0){
 
-                              <TableBody>
-                                  <TableRow>
-                                      <TableCell>
+    
+    return (
+        <div className='container'>
+            <Paper className={classes.root}>
+                <div className={classes.tableWrapper}>
+                <Table className={classes.table}>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell style={{fontSize:'24px', fontWeight:'600'}}>ID</TableCell>
+                            <TableCell style={{fontSize:'24px', fontWeight:'600'}}>NAMA</TableCell>
+                            <TableCell style={{fontSize:'24px', fontWeight:'600'}}>HARGA</TableCell>
+                            <TableCell style={{fontSize:'24px', fontWeight:'600'}}>DISC</TableCell>
+                            <TableCell style={{fontSize:'24px', fontWeight:'600'}}>QTY</TableCell>
+                            <TableCell style={{fontSize:'24px', fontWeight:'600'}}>TOTAL</TableCell>
+                            <TableCell style={{fontSize:'24px', fontWeight:'600'}}>ACT</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                    {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row,index) => (
+                        <TableRow key={row.id}>
+                        <TableCell>{index+1}</TableCell>
+                        <TableCell>
+                            {row.product_name}
+                        </TableCell>
+                        <TableCell>{formatMoney(row.product_price)}</TableCell>
+                        <TableCell>{row.product_discount} %</TableCell>
+                        
+                        {this.state.edit === index ? <TableCell><input style={{width : '50px'}} defaultValue={row.product_quantity} onChange={this.qtyValidation} type='number' ref='qtyEdit' className='form-control'/></TableCell>:  <TableCell>{row.product_quantity}</TableCell>}
+                        <TableCell>{formatMoney(row.product_quantity*(row.product_price - (row.product_price*(row.product_discount/100))))}</TableCell>
+                        {this.state.edit === index ?  <TableCell><input type='button' value='cancel' onClick={() => this.setState({edit : -1})} className='btn btn-danger mr-2'/><input type='button' value='save' onClick={()=>this.onBtnSave(row)} className='btn btn-success mr-2'/></TableCell>  :
+                        <TableCell><input type='button' value='edit' onClick={() => this.setState({edit : index})} className='btn btn-primary mr-2'/> <input type='button' value='delete' onClick={()=>this.onBtnDelete(row.id)} className='btn btn-danger mr-2'/></TableCell>}
 
-                                      <Input ref={input => this.quantityEdit=input} placeholder={product_quantity} className="mt-2 ml-2 mb-2" />
-                                                           
-
-
-                                          <Button onClick={this.BtnSave} animated color="teal" className="mt-2 ml-2 mb-2" >
-                                              <Button.Content visible>Save</Button.Content>
-                                              <Button.Content hidden>
-                                                  <Icon name='save' />
-                                              </Button.Content>
-                                          </Button>
-                                          <Button onClick={this.btnCANCEL} animated color="red" className="mt-2 ml-2 mb-2" >
-                                              <Button.Content visible>cancel</Button.Content>
-                                              <Button.Content hidden>
-                                                  <Icon name='cancel' />
-                                              </Button.Content>
-                                          </Button>
-                                      </TableCell>
-                                  </TableRow>
-                              </TableBody>
-
-                          </TableHead>  
-                      </Table>
-                  </Paper>
-                  : null
-                }
+                        </TableRow>
+                    ))}
+                    {emptyRows > 0 && (
+                        <TableRow style={{ height: 48 * emptyRows }}>
+                        <TableCell colSpan={6} />
+                        </TableRow>
+                    )}
+                    </TableBody>
+                    <TableFooter>
+                    <TableRow>
+                        <TablePagination
+                        rowsPerPageOptions={[5, 10, 25]}
+                        colSpan={3}
+                        count={rows.length}
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        SelectProps={{
+                            native: true,
+                        }}
+                        onChangePage={this.handleChangePage}
+                        onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                        ActionsComponent={TablePaginationActionsWrapped}
+                        />
+                    </TableRow>
+                    </TableFooter>
+                </Table>
+                </div>
+            </Paper>
+            <Paper className='mt-4'>
+                <div className='row justify-content-center pt-4'>
+                    <div className='col-md-4'>
+                        <input type='button' className='btn btn-primary mr-3' onClick={this.onCheckout} value='Checkout Now' />
+                       <Link to='/'> <input type='button' className='btn btn-success' value='Continue Shopping' /></Link>
+                    </div>
+                </div>
+                <div className='row justify-content-center pb-4 mt-3'>
+                    <div>
+                      <div style={{fontWeight:'800', fontSize:'30px',textAlign:'center'}}> Total : {formatMoney(this.totalHarga())}</div>
+                      
+                    </div>
+                </div>
+            </Paper>
         </div>
-    );
-
-    } return <PageNotFound/>
+    )
+  } return <PageNotFound/>;
   }
 }
 
@@ -330,9 +341,10 @@ CustomPaginationActionsTable.propTypes = {
 const mapStateToProps = (state) => {
   return{
     role : state.user.role,
-    id : state.user.id
+    id : state.user.id,
+    user : state.user.user_name
   }
 }
 
 
-export default connect(mapStateToProps) (withStyles(styles)(CustomPaginationActionsTable));
+export default connect(mapStateToProps,{cartCount,resetCount}) (withStyles(styles)(CustomPaginationActionsTable));

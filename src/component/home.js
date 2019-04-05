@@ -6,20 +6,20 @@ import Carousel3 from './carousel-3'
 class Home extends React.Component{
     render(){
         return(
-            <div className="container">
-                    <div className="row mt-2" >
-                        <div className="col-md-4 mt-3"> 
+            <div>
+                    <div className="row" >
+                        <div className="col-md-4"> 
                              <Carousel1/>
                         </div>
-                        <div className="col-md-4 mt-3"> 
-                             <Carousel2/>
-                        </div>
-                        <div className="col-md-4 mt-3"> 
-                             <Carousel3/>
-                        </div>
 
+                        <div className="col-md-4"> 
+                            <Carousel2/>
+                        </div>
+                        
+                        <div className="col-md-4"> 
+                            <Carousel3/>
+                        </div>
                     </div>
-
             </div>
         )
     }

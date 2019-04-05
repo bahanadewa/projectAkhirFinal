@@ -8,3 +8,13 @@
     background-color:whitesmoke;
     
 }
+
+.hover {
+    border-radius: 30px;
+    padding-right: 20px;
+    padding-left: 20px;
+}
+.hover:hover {
+    background-color: #95BADA ;
+    color: whitesmoke;
+}
