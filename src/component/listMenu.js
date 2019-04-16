@@ -17,7 +17,7 @@ class Product extends React.Component {
     }
 
     getDataProduct =()=> {
-        Axios.get(urlAPI+"/product-menu")
+        Axios.get(urlAPI+"/getallproduct")
         .then((res) => this.setState({listProduct :res.data}))
         .catch ((err)=> console.log(err))
     }
@@ -57,54 +57,47 @@ class Product extends React.Component {
             return(
                 <div className="card col-md-3 mr-3 mt-3" style={{width: '18rem'}}>
                     <Link to={'/detail-menu/'+val.id}>
-                        <img height="280px" width="100%" src={val.img} className="card-img-top" alt="..." />
+                        <img height="280px" width="100%" src={urlAPI+"/"+val.product_img} className="card-img-top" alt="..." />
                     </Link>
 
-                    {/* pake if tennary  karena melakukan pengkodisian di dalam return */}
-
-                    {/* {   val.discount > 0 ? 
-                        <div className="discount">{val.discount} % </div>
-                        : null
-                    } */}
-
                     <div className="card-body">
-                        <h2 className="card-text" style={{fontSize:"15px",fontWeight:"bold"}}>{val.name}</h2>
+                        <h2 className="card-text" style={{fontSize:"15px",fontWeight:"bold"}}>{val.product_name}</h2>
                         <h5 className="card-text " style={{fontSize:"13px"}}> Nutrition Information </h5>
 
                     <table className="ml-3 mt-0" >
                         <tr style={{fontSize:"10px", color:'#7F7F7F'}}> 
                             <td>serving  </td>
-                            <td> : {val.serving} gr</td>
+                            <td> : {val.product_serving} gr</td>
                         </tr>
                         <tr style={{fontSize:"10px", color:'#7F7F7F'}}>
                             <td>calories </td>
-                            <td> : {val.calories} gr</td>
+                            <td> : {val.product_calories} gr</td>
                         </tr>
                         <tr style={{fontSize:"10px", color:'#7F7F7F'}}>
                             <td>fat </td>
-                            <td> : {val.fat} gr</td>
+                            <td> : {val.product_fat} gr</td>
                         </tr>
                         <tr style={{fontSize:"10px", color:'#7F7F7F'}}>
                             <td>protein </td>
-                            <td> : {val.protein} gr</td>
+                            <td> : {val.product_protein} gr</td>
                         </tr>
                         <tr style={{fontSize:"10px", color:'#7F7F7F'}}>
                             <td>carb </td>
-                            <td> : {val.carb} gr</td>
+                            <td> : {val.product_carb} gr</td>
                         </tr>
                         <tr style={{fontSize:"10px", color:'#7F7F7F'}}>
                             <td>fiber </td>
-                            <td> : {val.fiber} gr</td>
+                            <td> : {val.product_fiber} gr</td>
                         </tr>
                     </table>
 
-                        { val.discount > 0 ?
-                        <p className="card-text" style={{textDecoration:"line-through", color:'red',display:"inline"}}> Rp {val.price}</p> 
+                        { val.product_discount > 0 ?
+                        <p className="card-text" style={{textDecoration:"line-through", color:'red',display:"inline"}}> Rp {val.product_price}</p> 
                         : null
                         }
 
 
-                        <p className="card-text" style={{display:"inline",fontWeight:'500'}}> Rp {val.price- (val.price*val.discount/100)} </p>
+                        <p className="card-text" style={{display:"inline",fontWeight:'500'}}> Rp {val.product_price- (val.product_price*val.product_discount/100)} </p>
                         <button className="d-block btn btn-info mt-2" onClick={()=> this.addproduct(val)}  style={{height:"34px", width:"100%"}}> <i class="fas fa-cart-arrow-down"></i> add to cart </button>
                         
                     </div>

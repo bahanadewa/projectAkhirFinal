@@ -6,20 +6,18 @@ import swal from "sweetalert";
 import {cartCount} from '../1 action'
 
 class ProductDetail extends React.Component{
-    state = {productname : {} }
+    state = {productname : [] }
     componentDidMount(){
         this.getDataApi()
         
     }
 
     getDataApi = ()=>{
-        
-        var idUrl = this.props.match.params.id
+        var id = this.props.match.params.id
     
-        Axios.get(urlAPI+'/product-menu/'+idUrl)
+        Axios.get(urlAPI+'/getallproduct/'+id)
         .then((res)=>{
-            this.setState({productname : res.data})
-            
+            this.setState({productname : res.data[0]})
         })
         .catch((err)=>{
             console.log(err)
@@ -77,20 +75,18 @@ class ProductDetail extends React.Component{
         })
     }
 
-    //json-server -p 2000 db.json
     render(){
-        var {name, img, serving,calories,fat,protein,carb,fiber,category,price,discount} = this.state.productname
-
+        var {product_name, product_img,product_serving,product_calories,product_fat,product_protein,product_carb,product_fiber,product_category,product_price,product_discount} = this.state.productname
         return(
             <div className="container">
                     <div className="row">
                         <div className="col-md-4">
                                 <div className="card" style={{width: '100%'}}>
-                                    <img src={img} className="card-img-top" alt="..." />
+                                    <img src={urlAPI+"/"+product_img} className="card-img-top" alt="..." />
                                 </div>
                         </div>
                         <div className="col-md-8">
-                                <h1 style={{color:"#4C4C4C"}}> {name} </h1>
+                                <h1 style={{color:"#4C4C4C"}}> {product_name} </h1>
 
                                 <div style={{backgroundColor:'#D63E2A', 
                                             width:"50px", 
@@ -98,18 +94,18 @@ class ProductDetail extends React.Component{
                                             color:"white", 
                                             textAlign:"center",
                                             display:"inline-block",
-                                            borderRadius:"15px"}}> {discount} % </div>
+                                            borderRadius:"15px"}}> {product_discount} % </div>
 
                                 <span style={{fontSize:"12px",
                                             fontWeight:"600px",
                                             color:"#606060",
                                             marginLeft:"10px",
-                                            textDecoration:"line-through"}}> Rp {price}  </span>
+                                            textDecoration:"line-through"}}> Rp {product_price}  </span>
 
                                 <div style={{fontWeight:'700',
                                             fontSize :'24px',
                                             color:"#FF5722",
-                                            marginTop:'20px'}}> Rp {price- (price*(discount/100))} </div>
+                                            marginTop:'20px'}}> Rp {product_price- (product_price*(product_discount/100))} </div>
                                 
                                 <div className="row">
                                         <div className="col-md-2">
@@ -128,7 +124,7 @@ class ProductDetail extends React.Component{
 
                                 <div className="row mt-4">
                                     <div className="col-md-8" style={{color:'#606060', fontStyle:'italic'}}>
-                                        <p> serving {serving} gr | calories {calories} kcal | fat {fat} gr| protein {protein} gr | carb {carb} gr | fiber {fiber} gr  </p>
+                                        <p> serving {product_serving} gr | calories {product_calories} kcal | fat {product_fat} gr| protein {product_protein} gr | carb {product_carb} gr | fiber {product_fiber} gr  </p>
                                     </div>    
                                 </div>
 

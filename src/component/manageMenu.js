@@ -14,6 +14,7 @@ import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
+import { Link } from 'react-router-dom';
 import Axios from 'axios';
 import { urlAPI } from '../support/url-API';
 import {Button,Icon,Input,Label} from 'semantic-ui-react';
@@ -122,7 +123,9 @@ class CustomPaginationActionsTable extends React.Component {
     page: 0,
     rowsPerPage: 5,
     isEdit : false,
-    editItem : {}
+    editItem : {},
+    searchDataname : "",
+    searchDatakategory : "",
   };
 
   componentDidMount(){
@@ -130,8 +133,8 @@ class CustomPaginationActionsTable extends React.Component {
   }
 
   getDataApi = () =>{
-        Axios.get(urlAPI+'/product-menu')
-        .then ((res)=> this.setState({rows : res.data}))
+        Axios.get(urlAPI+'/getallproduct')
+        .then ((res)=> this.setState({rows : res.data,searchDataname : "",searchDatakategory :""}))
         .catch((err)=> console.log(err))
   }
 
@@ -145,61 +148,6 @@ class CustomPaginationActionsTable extends React.Component {
             this.getDataApi()
         })
         .catch((err)=> console.log(err))
-  }
-
-  onBtnAdd = ()=>{
-    var name = this.name.inputRef.value 
-    var img = this.img.inputRef.value
-    var serving = parseInt (this.serving.inputRef.value) 
-    var calories = parseInt (this.calories.inputRef.value )
-    var fat =parseInt (this.fat.inputRef.value )
-    var protein = parseInt ( this.protein.inputRef.value)
-    var carb =parseInt  (this.carb.inputRef.value )
-    var fiber =parseInt  (this.fiber.inputRef.value )
-    var category = this.category.inputRef.value
-    var price =parseInt  (this.price.inputRef.value )
-    var discount =parseInt  (this.discount.inputRef.value )
-
-    // property harus sesuai dengan db.json (property : variabel)
-    // post res.data (objek)
-    // get res.data (arr of objek) 
-    var newData={name , img, serving,calories,fat,protein,carb,fiber,category,price,discount}
-
-    if (name === "" | img ==="" | serving ==="" |
-        calories===""|fat==="" | protein==="" |
-        carb==="" |fiber===""| category==="" | 
-        price==="" | discount===""){
-      swal({
-        title: "try again!",
-        icon: "error",
-      });
-        alert("HARUS DI ISI")
-    }else{
-         Axios.post(urlAPI+'/product-menu',newData)
-         
-         .then((res)=>{
-              {
-                swal({
-                  title: "Add product",
-                  text: "add product success",
-                  icon: "success",
-                });
-              this.getDataApi()
-            } 
-         })
-         .catch((err)=> console.log(err))
-            this.name.inputRef.value =""
-            this.img.inputRef.value =""
-            this.serving.inputRef.value =""
-            this.calories.inputRef.value =""
-            this.fat.inputRef.value =""
-            this.protein.inputRef.value =""
-            this.carb.inputRef.value =""
-            this.fiber.inputRef.value =""
-            this.category.inputRef.value =""
-            this.price.inputRef.value =""
-            this.discount.inputRef.value =""
-    }
   }
 
   btnEDIT = (param) =>{
@@ -234,25 +182,34 @@ class CustomPaginationActionsTable extends React.Component {
     .catch ((err) => {console.log(err)})
   }
 
+  getdatasearch=()=>{
+    var inputname = this.refs.searchbyname.value
+    var inputcategory = this.refs.searchbycategory.value
+    this.setState({searchDataname : inputname,searchDatakategory :inputcategory})
+  }
+
 
   renderJsx =()=>{
-      var jsx = this.state.rows.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage).map((val)=>{
+      var arrSearchandFilter = this.state.rows.filter((val)=>{
+          return val.product_name.toLowerCase().startsWith(this.state.searchDataname) && val.product_category.toLowerCase().startsWith(this.state.searchDatakategory)
+      })
+      var jsx = arrSearchandFilter.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage).map((val)=>{
           return(
             <TableRow key = {val.id}>
                 <TableCell component="th" scope="row">
                     {val.id}
                 </TableCell>
-                <TableCell align="">{val.name}</TableCell>
-                <TableCell align=""><img src={val.img} width="50px"/></TableCell>
-                <TableCell align="">{val.serving}</TableCell>
-                <TableCell align="">{val.calories}</TableCell>
-                <TableCell align="">{val.fat}</TableCell>
-                <TableCell align="">{val.protein}</TableCell>
-                <TableCell align="">{val.carb}</TableCell>
-                <TableCell align="">{val.fiber}</TableCell>
-                <TableCell align="">{val.category}</TableCell>
-                <TableCell align="">{val.price}</TableCell>
-                <TableCell align="">{val.discount}</TableCell>
+                <TableCell align="">{val.product_name}</TableCell>
+                <TableCell align=""><img src={urlAPI+"/"+val.product_img} width="50px"/></TableCell>
+                <TableCell align="">{val.product_serving}</TableCell>
+                <TableCell align="">{val.product_calories}</TableCell>
+                <TableCell align="">{val.product_fat}</TableCell>
+                <TableCell align="">{val.product_protein}</TableCell>
+                <TableCell align="">{val.product_carb}</TableCell>
+                <TableCell align="">{val.product_fiber}</TableCell>
+                <TableCell align="">{val.product_category}</TableCell>
+                <TableCell align="">{val.product_price}</TableCell>
+                <TableCell align="">{val.product_discount}</TableCell>
                 
                 <TableCell>
                         <Button onClick={()=>this.btnEDIT(val)} animated color="teal">
@@ -291,8 +248,17 @@ class CustomPaginationActionsTable extends React.Component {
     {
     return (
         <div className="container">
+                <div className="row">
+                    <div className="col-md-6">
+                        <input type='text' placeholder='SEARCH BY NAME' ref="searchbyname" style={{marginBottom:'10px'}} className='form-control' onChange={this.getdatasearch}/>
+                    </div>
+                    <div className="col-md-6">
+                        <input type='text' placeholder='SEARCH BY CATEGORY' ref="searchbycategory" style={{marginBottom:'10px'}} className='form-control' onChange={this.getdatasearch}/>
+                    </div>
+                </div>
                 <Paper className={classes.root}>
                     <div className={classes.tableWrapper}>
+                      
                         <Table className={classes.table}>
                             <TableHead>
                                 <TableRow>
@@ -340,53 +306,13 @@ class CustomPaginationActionsTable extends React.Component {
                         </Table>
                     </div>
                 </Paper>
-                 {/* ========================================== ADD PRODUCT SECTION ================================================== */}
-                <Paper className="mt-5">
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                            <TableCell style={{fontSize :'16px',fontWeight:"600px"}}>ADD PRODUCT</TableCell>
-                            </TableRow>
-
-                            <TableBody>
-                                <TableRow>
-
-
-                                    <TableCell>
-                                        <Input ref={input => this.name=input} placeholder="input product name" className="mt-2 ml-2 mb-2" />
-                                        <Input ref={input => this.img=input} placeholder="Img" className="mt-2 ml-2 mb-2" />
-                                        <Input ref={input => this.serving=input} placeholder="serving" className="mt-2 ml-2 mb-2" />
-                                        <Input ref={input => this.calories=input} placeholder="calories" className="mt-2 ml-2 mb-2" />
-                                        <Input ref={input => this.fat=input} placeholder="fat" className="mt-2 ml-2 mb-2" />
-                                        <Input ref={input => this.protein=input} placeholder="protein" className="mt-2 ml-2 mb-2" />
-                                        <Input ref={input => this.carb=input} placeholder="carb" className="mt-2 ml-2 mb-2" />
-                                        <Input ref={input => this.fiber=input} placeholder="fiber" className="mt-2 ml-2 mb-2" />
-                                        <Input ref={input => this.category=input} placeholder="category" className="mt-2 ml-2 mb-2" />
-                                        <Input ref={input => this.price=input} className="ml-2" labelPosition='right' type='text' placeholder='Amount'>
-                                            <Label basic> Rp </Label>
-                                            <input />
-                                            <Label>.00</Label>
-                                        </Input>
-                                        <Input ref={input => this.discount=input} placeholder="discount" className="mt-2 ml-2 mb-2" />
-
-                                       
-
-
-                                        <Button animated color="red" className="mt-2 ml-2 mb-2"   onClick={this.onBtnAdd}>
-                                            <Button.Content visible>add product</Button.Content>
-                                            <Button.Content hidden>
-                                                <Icon name='add' />
-                                            </Button.Content>
-                                        </Button>
-                                    </TableCell>
-
-
-                                </TableRow>
-                            </TableBody>
-
-                        </TableHead>  
-                    </Table>
-                </Paper>
+              
+                <div className="mt-5">
+                  <center><a href="/add-product" class="btn btn-info" role="button">ADD PRODUCT</a></center>
+                    
+                </div>
+             
+                
                 {/* ========================================== EDIT PRODUCT SECTION ================================================== */}
                 {
                   this.state.isEdit === true ?

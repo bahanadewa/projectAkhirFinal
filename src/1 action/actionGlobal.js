@@ -11,33 +11,44 @@ export const login =(paramsUserName,paramsPassword)=>{
             type: "LOADING", 
         })
 
-        axios.get(urlAPI+'/user',{params:{username : paramsUserName, password :paramsPassword}}) //untuk ngeCheck apakah user ada apa engga
+        axios.get(urlAPI+'/getuserlogin?username='+paramsUserName+'&password='+paramsPassword)
         //ketika berhasil terhubung kem daabase makan lanjut ke then
-        .then((res)=>{
-                if (res.data.length >0){
-                    dispatch({
-                        type : 'LOGIN_SUCCESS', // untuk menentukan bagian bana yang akan dirubah di global state
-                        payload : { //payload bahan untuk merubah global state
-                                username :res.data[0].username,
-                                role : res.data[0].role,
-                                id : res.data[0].id
-                            }
-                    })
-                }else {
-                    dispatch({
-                        type: 'USER_NAME_NOT_FOUND'
-                    })
+        .then((res) => {
+            console.log(res)
+
+        // IF USERNAME DAN PASSWORD SESUAI MAKA RES.DATA ADA ISINYA
+            if(res.data.length > 0){
+                if(res.data[0].verified===0){
+                    dispatch(
+                        {
+                            type : 'LOGIN_VERIFY'
+                        }
+                    )
+                }else{
+                     console.log(res)
+                        dispatch(
+                        {
+                            type : 'LOGIN_SUCCESS',
+                            payload : res.data
+                        }
+                    ) 
                 }
-            })
-        
-        .catch((err)=>{
-            dispatch ({
-                type : 'SISTEM_ERROR'
+            }else{
+                dispatch({
+                    type : 'USER_NOT_FOUND',
+                    payload : ['','Username not Found']
+                })
+            }
+            
+        })
+        .catch((err) => {
+            dispatch({
+                type : 'SYSTEM_ERROR'
             })
         })
-
     }
 }
+
 
 export const cookieChecked = () => {
     return {
@@ -47,23 +58,18 @@ export const cookieChecked = () => {
 
 export const keepLogIn = (cookie)=>{
     return(dispatch) => {
-        axios.get(urlAPI + '/user',{params :{username : cookie}})
-        .then ((res)=> {
-            if (res.data.length >0){
+        axios.get(urlAPI + '/getalluserbyusername/'+cookie)
+        .then((res) => {
+            if(res.data.length > 0){
                 dispatch({
                     type : 'LOGIN_SUCCESS',
-                    payload : {
-                        username : res.data[0].username,
-                        role : res.data[0].role,
-                        id : res.data[0].id
-                    }
+                    payload : res.data
                 })
             }
         })
-
-        .catch((err)=> console.log(err))
+        .catch((err) => console.log(err))
     }
-}
+} 
 
 export const resetuser = () =>{
     return{
@@ -73,45 +79,48 @@ export const resetuser = () =>{
 
 
 export const register_signup = (a,b,c,d) =>{
-    return (dispatch)=>{
-        dispatch ({
+    return(dispatch)=>{
+        dispatch({
             type : 'LOADING'
         })
-        var newdata = {username : a, password :b , email : c, phone : d, role :"user"}
+        var newData = {username : a, password : b, email : c, phone : d}
+        // Mengecek Username availablity
 
-        axios.get( urlAPI + '/user?username='+ newdata.username)
-        .then ((res) => {
-            if (res.data.length > 0){
-                dispatch ({
+        axios.get(urlAPI +'/getalluserbyusername/'+ a)
+        .then((res) => {
+            if(res.data.length > 0){
+                dispatch({
                     type : 'USERNAME_NOT_AVAILABLE'
                 })
-            } else {
-                axios.post(urlAPI + '/user', newdata)
-                .then ((res)=> dispatch({
-                    type : 'LOGIN_SUCCESS',
-                    payload : {
-                        username :res.data.username,
-                        role : res.data.role,
-                    }
-                },
-                    objCookie.set('memory-cookie',a,{path :'/'})
-                ))
-                .catch ((err)=> console.log(err))
+            }
+            else{
+                axios.post(urlAPI +'/addnewuser',newData)
+                .then((res) => {
+                        dispatch({
+                            type : 'LOGIN_SUCCESS-1',
+                            //Mengirim Payload dalam bentuk Object
+                            //payload : { username : newData.username, id : res.data.id, email : c} 
+                            payload : a
+                            },
+                            // Parameter Ketiga agar cookie bisa diakses di semua komponen
+                            // objCookie.set('userData',a,{path : '/'}),
+                        ) 
+                    } 
+                )
+                .catch((err) => console.log(err))
             }
         })
-
-        .catch ((err) => {
-            dispatch ({
-                type : 'SISTEM_ERROR'
+        .catch((err) => {
+            dispatch({
+                type : 'SYSTEM_ERROR'
             })
         })
-
     }
 }
 
 export const loginWithGoogle= (email)=>{
     return (dispatch)=>{
-        axios.get(urlAPI+'/user?username='+email)
+        axios.get(urlAPI+'/user??username='+email)
         .then((res)=> {
             if (res.data.length >0){
                 dispatch({
@@ -121,7 +130,7 @@ export const loginWithGoogle= (email)=>{
                     objCookie.set('memory-cookie',email,{path :'/'})
                 )
             }else {
-                axios.post(urlAPI+'/user',{username : email, role : "user"})
+                axios.post(urlAPI+'/db_user',{username : email, role : "user"})
                 .then((res)=>{
                     dispatch({
                         type : 'LOGIN_SUCCESS',
