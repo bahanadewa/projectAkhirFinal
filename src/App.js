@@ -18,7 +18,7 @@ import PageNotFound from './component/404'
 import History from './component/transactionHistory'
 import ScrollToTop from './component/scrollToTop'
 import Footer from './component/footer'
-import Addproduct from './component/addproduct'
+import Addproduct from './component/addproductadmin'
 import ManageCategory from './component/managecategory'
 
 

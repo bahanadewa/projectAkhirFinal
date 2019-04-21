@@ -3,13 +3,9 @@ project WEB MAKANAN SEHAT
 <!-- -- Perkembangan -- -->
 
 - sudah mulai memakai db mysql bukan db json
-
-- show product list
+- manage category ( add, delete, edit)
+- manage product (add, delete, edit)
+- show product
 - show product detail
 
-- add category
-- edit category
-- delete category
-
-- manage product ( add product baru )
 

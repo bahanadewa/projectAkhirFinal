@@ -76,7 +76,14 @@ printDataCategory=()=>{
     return data
 }
 
-    render() {
+
+
+
+
+
+
+
+render() {
 
         return(
                 <div className='container'>

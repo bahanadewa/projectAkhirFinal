@@ -135,7 +135,7 @@ class MyNavbar extends Component {
                                                 <DropdownMenu right style={{fontSize:"14px", fontWeight:"500", color:"#7F7F7F"}}>
                                                 {this.props.role === "admin"?
                                                      <Link to ="/manage-menu" style={{textDecoration:"none"}}>
-                                                     <DropdownItem style={{color:"#7F7F7F"}}> Manage product</DropdownItem>
+                                                     <DropdownItem style={{color:"#7F7F7F"}}> Manage Product</DropdownItem>
                                                      </Link>
                                                       : null}
                                                  {this.props.role === "admin"?

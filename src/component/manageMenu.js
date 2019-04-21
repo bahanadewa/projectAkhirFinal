@@ -15,6 +15,7 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import { Link } from 'react-router-dom';
+import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import Axios from 'axios';
 import { urlAPI } from '../support/url-API';
 import {Button,Icon,Input,Label} from 'semantic-ui-react';
@@ -120,22 +121,32 @@ const styles = theme => ({
 class CustomPaginationActionsTable extends React.Component {
   state = {
     rows: [],
+    getdatacategory:[],
     page: 0,
     rowsPerPage: 5,
     isEdit : false,
     editItem : {},
     searchDataname : "",
     searchDatakategory : "",
+    selecctedFile : null
   };
 
   componentDidMount(){
         this.getDataApi()
+        this.getDataCategory()
   }
 
   getDataApi = () =>{
         Axios.get(urlAPI+'/getallproduct')
-        .then ((res)=> this.setState({rows : res.data,searchDataname : "",searchDatakategory :""}))
+        .then ((res)=> this.setState({rows : res.data ,searchDataname : "",searchDatakategory :""}))
         .catch((err)=> console.log(err))
+  }
+
+  getDataCategory = ()=>{
+        Axios.get(urlAPI+'/getallcategory')
+        .then((res)=>{
+          this.setState({getdatacategory : res.data})
+        })    
   }
 
   handleChangePage = (event, page) => {
@@ -181,6 +192,7 @@ class CustomPaginationActionsTable extends React.Component {
     })
     .catch ((err) => {console.log(err)})
   }
+  
 
   getdatasearch=()=>{
     var inputname = this.refs.searchbyname.value
@@ -189,9 +201,83 @@ class CustomPaginationActionsTable extends React.Component {
   }
 
 
+  renderOptionCatrgory =()=>{
+        var data = this.state.getdatacategory.map((val)=>{
+            return (
+            <option value={val.id}>{val.product_category}</option>
+            )
+        })
+        return data
+}
+
+  onSaveBtnEdit=()=>{
+        var product_name = this.refs.product_name.value ? this.refs.product_name.value : this.state.editItem.product_name ;
+        var product_serving = this.refs.product_serving.value ? this.refs.product_serving.value  : this.state.editItem.product_serving ;
+        var product_calories = this.refs.product_calories.value? this.refs.product_calories.value : this.state.editItem.product_calories ;
+        var product_fat = this.refs.product_fat .value? this.refs.product_fat .value : this.state.editItem.product_fat ;
+        var product_protein = this.refs.product_protein.value? this.refs.product_protein.value : this.state.editItem.product_protein ;
+        var product_carb = this.refs.product_carb.value? this.refs.product_carb.value : this.state.editItem.product_carb ;
+        var product_fiber =  this.refs.product_fiber.value? this.refs.product_fiber.value : this.state.editItem.product_fiber ;
+        var product_price = this.refs.product_price.value? this.refs.product_price.value : this.state.editItem.product_price ;
+        var product_discount = this.refs.product_discount.value? this.refs.product_discount.value : this.state.editItem.product_discount ;
+        var product_description = this.refs.product_description.value? this.refs.product_description.value : this.state.editItem.product_description ;
+
+
+    var data = {
+        product_name, product_serving, product_calories,
+        product_fat, product_protein, product_carb, product_fiber ,
+        product_price , product_discount, product_description
+    }
+     var product_category = this.refs.product_category.value
+     
+    if(this.state.selecctedFile){
+      var fd = new FormData()
+      fd.append('edit', this.state.selecctedFile, this.state.selecctedFile.name)    
+      fd.append('data',JSON.stringify(data))
+
+      fd.append('imageBefore', this.state.editItem.product_img)
+
+      Axios.put(urlAPI+'/editProduct/'+this.state.editItem.id, fd)
+            .then((res)=>{
+              this.setState({isEdit : false})
+              this.getDataApi()
+            })
+      Axios.put(urlAPI+'/updateCategoryProduct/'+this.state.editItem.id, {product_category})
+            .then((res)=>{
+              this.setState({isEdit : false})
+              this.getDataApi()
+            })
+      swal('UPDATE','SUCCESS','success')
+
+    }else{
+      Axios.put(urlAPI+'/editProduct/'+this.state.editItem.id,data)
+            .then((res)=>{
+              this.setState({isEdit : false})
+              this.getDataApi()
+              swal('UPDATE','SUCCESS','success')
+            })  
+      Axios.put(urlAPI+'/updateCategoryProduct/'+this.state.editItem.id, {product_category})
+            .then((res)=>{
+              this.setState({isEdit : false})
+              this.getDataApi()
+            }) 
+     }   
+  }
+
+
+  onChangeHendler = (event) => {
+    //untuk mendapatkan file image
+    this.setState({selecctedFile : event.target.files[0]})
+  }
+
+  valueHandler = () => {
+    var value = this.state.selecctedFile ? this.state.selecctedFile.name : 'Pick a Picture'
+    return value
+  }
+
   renderJsx =()=>{
       var arrSearchandFilter = this.state.rows.filter((val)=>{
-          return val.product_name.toLowerCase().startsWith(this.state.searchDataname) && val.product_category.toLowerCase().startsWith(this.state.searchDatakategory)
+          return (val.product_name.toLowerCase().startsWith(this.state.searchDataname)) && (val.product_category.toLowerCase().startsWith(this.state.searchDatakategory))
       })
       var jsx = arrSearchandFilter.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage).map((val)=>{
           return(
@@ -210,6 +296,7 @@ class CustomPaginationActionsTable extends React.Component {
                 <TableCell align="">{val.product_category}</TableCell>
                 <TableCell align="">{val.product_price}</TableCell>
                 <TableCell align="">{val.product_discount}</TableCell>
+                <TableCell align="">{val.product_description}</TableCell>
                 
                 <TableCell>
                         <Button onClick={()=>this.btnEDIT(val)} animated color="teal">
@@ -230,13 +317,16 @@ class CustomPaginationActionsTable extends React.Component {
           )
       })
       return jsx
-    }; 
+  }; 
 
   handleChangeRowsPerPage = event => {
     this.setState({ page: 0, rowsPerPage: event.target.value });
   };
 
 
+
+
+// =========================================== BATAS AKHIR FUNCTION ===============================================
 
 
   render() {
@@ -274,104 +364,133 @@ class CustomPaginationActionsTable extends React.Component {
                                     <TableCell style={{fontSize :'16px',fontWeight:"600px"}}>CATEGORY</TableCell>
                                     <TableCell style={{fontSize :'16px',fontWeight:"600px"}}>PRICE</TableCell>
                                     <TableCell style={{fontSize :'16px',fontWeight:"600px"}}>DISCOUNT</TableCell>
+                                    <TableCell style={{fontSize :'16px',fontWeight:"600px"}}>DESC</TableCell>
                                 </TableRow>
                             </TableHead>
 
                             <TableBody>
                                 {this.renderJsx()}
                           
-                            {emptyRows > 0 && (
-                                <TableRow style={{ height: 50 * emptyRows }}>
-                                <TableCell colSpan={6} />
-                                </TableRow>
-                            )}
+                                {emptyRows > 0 && (
+                                    <TableRow style={{ height: 50 * emptyRows }}>
+                                    <TableCell colSpan={6} />
+                                    </TableRow>
+                                )}
                             </TableBody>
                             <TableFooter>
-                            <TableRow>
-                                <TablePagination
-                                rowsPerPageOptions={[5, 10, 25]}
-                                colSpan={3}
-                                count={rows.length}
-                                rowsPerPage={rowsPerPage}
-                                page={page}
-                                SelectProps={{
-                                    native: true,
-                                }}
-                                onChangePage={this.handleChangePage}
-                                onChangeRowsPerPage={this.handleChangeRowsPerPage}
-                                ActionsComponent={TablePaginationActionsWrapped}
-                                />
-                            </TableRow>
+                                          <TableRow>
+                                              <TablePagination
+                                              rowsPerPageOptions={[5, 10, 25]}
+                                              colSpan={3}
+                                              count={rows.length}
+                                              rowsPerPage={rowsPerPage}
+                                              page={page}
+                                              SelectProps={{
+                                                  native: true,
+                                              }}
+                                              onChangePage={this.handleChangePage}
+                                              onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                                              ActionsComponent={TablePaginationActionsWrapped}
+                                              />
+                                          </TableRow>
                             </TableFooter>
                         </Table>
                     </div>
                 </Paper>
-              
                 <div className="mt-5">
                   <center><a href="/add-product" class="btn btn-info" role="button">ADD PRODUCT</a></center>
                     
                 </div>
-             
-                
+                    
                 {/* ========================================== EDIT PRODUCT SECTION ================================================== */}
-                {
-                  this.state.isEdit === true ?
-                  <Paper className="mt-5">
-                      <Table>
-                          <TableHead>
-                              <TableRow>
-                              <TableCell style={{fontSize :'24px',fontWeight:"600px"}}>EDIT PRODUCT{" ( "+name+" )"}</TableCell>
-                              </TableRow>
+              
+              <div>
+              <Modal isOpen={this.state.isEdit} toggle={()=>this.setState({isEdit: false})} className={this.props.className}>
+                <ModalHeader toggle={()=>this.setState({isEdit: false})}>EDIT PRODUCT</ModalHeader>
 
-                              <TableBody>
-                                  <TableRow>
-                                      <TableCell>
+                <ModalBody>
+                  <div className="container">
+                  <div className="row justify-content-center">
+                        <div className="col-md">
+                              <td>
+                                <tr> 
+                                    <label> PRODUCT NAME </label> 
+                                    <input type="text" placeholder={this.state.editItem.product_name} ref="product_name" className="form form-control"/> 
+                                </tr>
+                                <tr> 
+                                    <label> IMAGE </label>
+                                    <div>
+                                      <tr>
+                                          <img src={urlAPI+'/'+this.state.editItem.product_img} width="100%"/> 
+                                      </tr>
+                                      <tr>
+                                          <input style={{display : 'none'}} ref = 'input' type = 'file' onChange={this.onChangeHendler}/> 
+                                          <input className = 'form-control btn-success mt-2' onClick={()=>this.refs.input.click()} type = 'button' value ={this.valueHandler()}  />  
+                                      </tr>
+                                    </div>
+                                </tr>
+                                <tr> 
+                                    <label> SERVING </label>
+                                    <input type="number" ref="product_serving" className="form form-control"/> 
+                                </tr>
+                                <tr>
+                                    <label> CALORIES </label> 
+                                    <input type="number" ref="product_calories"  className="form form-control"/>
+                                </tr>
+                                <tr>
+                                    <label> FAT </label> 
+                                    <input type="number" ref="product_fat" className="form form-control"/>
+                                </tr>
+                                <tr>
+                                    <label> PROTEIN </label> 
+                                    <input type="number" ref="product_protein" className="form form-control"/>
+                                </tr>
+                                <tr>
+                                    <label> CARB </label> 
+                                    <input type="number" ref="product_carb"  className="form form-control"/>
+                                </tr>
+                                <tr>
+                                    <label> FIBER </label> 
+                                    <input type="number" ref="product_fiber"  className="form form-control"/>
+                                </tr>
+                                <tr>
+                                    <label> CATEGORY </label> 
+                                    <select className='form-control form-control-sm' ref="product_category">
+                                    {this.renderOptionCatrgory()}
+                                    </select>
+                                </tr>
+                                <tr>
+                                    <label> PRICE </label> 
+                                    <input type="number" ref="product_price"  className="form form-control"/>
+                                </tr>
+                                <tr>
+                                    <label> DISCOUNT </label> 
+                                    <input type="number" ref="product_discount"  className="form form-control"/>
+                                </tr>
 
-                                        <Input ref={input => this.nameEDIT=input} placeholder="input product name" className="mt-2 ml-2 mb-2" />
-                                        <Input ref={input => this.imgEDIT=input} placeholder="Img" className="mt-2 ml-2 mb-2" />
-                                        <Input ref={input => this.servingEDIT=input} placeholder="serving" className="mt-2 ml-2 mb-2" />
-                                        <Input ref={input => this.caloriesEDIT=input} placeholder="calories" className="mt-2 ml-2 mb-2" />
-                                        <Input ref={input => this.fatEDIT=input} placeholder="fat" className="mt-2 ml-2 mb-2" />
-                                        <Input ref={input => this.proteinEDIT=input} placeholder="protein" className="mt-2 ml-2 mb-2" />
-                                        <Input ref={input => this.carbEDIT=input} placeholder="carb" className="mt-2 ml-2 mb-2" />
-                                        <Input ref={input => this.fiberEDIT=input} placeholder="fiber" className="mt-2 ml-2 mb-2" />
-                                        <Input ref={input => this.categoryEDIT=input} placeholder="category" className="mt-2 ml-2 mb-2" />
-                                        <Input ref={input => this.priceEDIT=input} className="ml-2" labelPosition='right' type='text' placeholder='Amount'>
-                                            <Label basic> Rp </Label>
-                                            <input />
-                                            <Label>.00</Label>
-                                        </Input>
-                                        <Input ref={input => this.discountEDIT=input} placeholder="discount" className="mt-2 ml-2 mb-2" />
+                                <tr>
+                                    <label> DESC </label> 
+                                    <input type="number" ref="product_description"  className="form form-control"/>              
+                                </tr>
+                              </td>
+                        </div> 
+                  </div>
+                  </div>
+                </ModalBody>
 
-
-
-                                          <Button onClick={this.btnSAVE} animated color="teal" className="mt-2 ml-2 mb-2" >
-                                              <Button.Content visible>Save</Button.Content>
-                                              <Button.Content hidden>
-                                                  <Icon name='save' />
-                                              </Button.Content>
-                                          </Button>
-                                          <Button onClick={this.btnCANCEL} animated color="red" className="mt-2 ml-2 mb-2" >
-                                              <Button.Content visible>cancel</Button.Content>
-                                              <Button.Content hidden>
-                                                  <Icon name='cancel' />
-                                              </Button.Content>
-                                          </Button>
-                                      </TableCell>
-                                  </TableRow>
-                              </TableBody>
-
-                          </TableHead>  
-                      </Table>
-                  </Paper>
-                  : null
-                }
+                <ModalFooter>
+                  <Button color="primary" onClick={this.onSaveBtnEdit}> Save </Button>{' '}
+                  <Button color="secondary" onClick={()=>this.setState({isEdit: false})}>Cancel</Button>
+                </ModalFooter>
+              </Modal>
+              </div>
+  
         </div>
     );
 
     } return <PageNotFound/>
+    }
   }
-}
 
 CustomPaginationActionsTable.propTypes = {
   classes: PropTypes.object.isRequired,

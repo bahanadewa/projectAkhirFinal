@@ -94,7 +94,7 @@ class Category extends React.Component{
                         <td>{index+1}</td>
                         <td><input placeholder={val.product_category} ref='categoryEdit'/></td>
                         <td><input type='button' className='btn btn-primary' value='SAVE'onClick={()=>this.saveBtnEdit(val.id)}/></td>
-                        <td><input type='button' className='btn btn-danger' value='CANCLE' onClick={this.cancelBtn}/></td>                    
+                        <td><input type='button' className='btn btn-danger' value='CANCEL' onClick={this.cancelBtn}/></td>                    
                     </tr>
                 )
             }
@@ -113,22 +113,27 @@ class Category extends React.Component{
     render(){
         return(
             <div>
-                <h1 className = 'container' style={{marginLeft : '40%'}}>MANAGE CATEGORY</h1>
+                <h3 className = 'container' style={{marginLeft : '40%'}}>MANAGE CATEGORY</h3>
                 <div className = 'container'>
+                
+                <div className="row">
+                    <div className="col-md-4">
+                        <input type='text' placeholder='SEARCH' ref="searchbyname" style={{marginBottom:'10px'}} className='form-control' onChange={this.getdatasearch}/>
+                    </div>
+                    <div className="col-md-3">
+                    <input type='button' value='ADD CATEGORY' style={{marginBottom:'10px'}} className='btn btn-primary ' onClick={()=>this.setState({addpopup:true})}/>
+                    </div>
+                </div>
 
-                <center>
-                <input type='text' placeholder='SEARCH' ref="searchbyname" style={{marginBottom:'10px'}} className='form-control' onChange={this.getdatasearch}/>
-                <input type='button' value='ADD CATEGORY' style={{marginBottom:'10px'}} className='btn btn-primary ' onClick={()=>this.setState({addpopup:true})}/>
-                </center>
                         {
                             this.state.addpopup===true?
-                            <div className='row justify-content-center'>
-                            <div className='col-3'>
-                            <input type='text' className='form-control' ref='category' placeholder='masukkan category'/>
-                                </div>
-                            <div className='col-3'>
-                            <input type='button' className='btn btn-primary' value='Save' onClick={this.saveCategory}/>
-                            <input type='button' className='btn btn-danger' value='Cancel' onClick={this.cancelCategory}/>
+                            <div className='row'>
+                            <div className='col-md-4'>
+                                <input type='text' className='form-control' ref='category' placeholder='Add new category'/>
+                            </div>
+                            <div className='col-md-3'>
+                                <input type='button' className='btn btn-primary' value='Save' onClick={this.saveCategory}/>
+                                <input type='button' className='btn btn-danger' value='Cancel' onClick={this.cancelCategory}/>
                             </div>
                             </div>
                             : null
