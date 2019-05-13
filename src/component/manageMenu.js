@@ -286,7 +286,7 @@ class CustomPaginationActionsTable extends React.Component {
                     {val.id}
                 </TableCell>
                 <TableCell align="">{val.product_name}</TableCell>
-                <TableCell align=""><img src={urlAPI+"/"+val.product_img} width="50px"/></TableCell>
+                <TableCell align=""><img src={urlAPI+"/"+val.product_img} width="250px" height="250px"/></TableCell>
                 <TableCell align="">{val.product_serving}</TableCell>
                 <TableCell align="">{val.product_calories}</TableCell>
                 <TableCell align="">{val.product_fat}</TableCell>
@@ -300,15 +300,15 @@ class CustomPaginationActionsTable extends React.Component {
                 
                 <TableCell>
                         <Button onClick={()=>this.btnEDIT(val)} animated color="teal">
-                            <Button.Content visible>Edit</Button.Content>
-                            <Button.Content hidden>
+                            {/* <Button.Content visible></Button.Content> */}
+                            <Button.Content visible>
                                 <Icon name='edit' />
                             </Button.Content>
                         </Button>
 
                         <Button animated color="red" onClick={()=>this.onBtnDelete(val.id)}>
-                            <Button.Content visible>Delete</Button.Content>
-                            <Button.Content hidden>
+                            {/* <Button.Content visible></Button.Content> */}
+                            <Button.Content visible>
                                 <Icon name='delete' />
                             </Button.Content>
                         </Button>
@@ -365,6 +365,7 @@ class CustomPaginationActionsTable extends React.Component {
                                     <TableCell style={{fontSize :'16px',fontWeight:"600px"}}>PRICE</TableCell>
                                     <TableCell style={{fontSize :'16px',fontWeight:"600px"}}>DISCOUNT</TableCell>
                                     <TableCell style={{fontSize :'16px',fontWeight:"600px"}}>DESC</TableCell>
+                                    <TableCell style={{fontSize :'16px',fontWeight:"600px"}}>ACTION</TableCell>
                                 </TableRow>
                             </TableHead>
 

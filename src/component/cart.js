@@ -140,7 +140,8 @@ class CustomPaginationActionsTable extends React.Component {
 
   getDataApi = () =>{
         var getcookie = objcookie.get('memory-cookie')
-        Axios.get(urlAPI+'/cart?product_idUser'+this.props.id)
+        Axios.get(urlAPI+'/getallcart/'+getcookie)
+        
         .then ((res)=> this.setState({rows : res.data}))
         .catch((err)=> console.log(err))
   }
@@ -155,7 +156,7 @@ class CustomPaginationActionsTable extends React.Component {
 
   onBtnDelete = (id)=>{
         var getcookie = objcookie.get('memory-cookie')
-        Axios.delete(urlAPI+'/cart/'+id)
+        Axios.delete(urlAPI+'/cartdelete/'+id)
         .then((res)=>{
           swal({
             title: "Deleted",
@@ -207,30 +208,13 @@ class CustomPaginationActionsTable extends React.Component {
     return arr
   }
 
-  deleteCart = () => {
-    for(var i = 0 ; i < this.state.rows.length ; i++){
-      Axios.delete(urlAPI + '/cart/' + this.state.rows[i].id)
-      .then((res) => {
-        this.props.resetCount()
-        this.getDataApi()
-      })
-    }
-  }
-
   onCheckout =() => {
-    var date = new Date()
-    var newData = {
-      product_idUser : this.props.id,
-      product_username : this.props.user,
-      tanggal : date.getDate() + ':' + date.getMonth() + ':' + date.getFullYear() + '->' +date.getHours()+':'+date.getMinutes()+ ":"+date.getSeconds(),
-      total : this.totalHarga(),
-      item : this.getItem()
-    }
-
-    Axios.post(urlAPI + '/history' , newData)
+    
+    Axios.post(urlAPI + '/history',{username : this.props.user , total : this.totalHarga()})
     .then((res) => {
-      swal('Checkout Status' , 'Success','success')
-      this.deleteCart()
+      swal('Check Your Email For Payment Confirmation' , 'Success','success')
+      this.getDataApi()
+      this.props.cartCount(this.props.user)
     })
   }
 
@@ -252,7 +236,7 @@ class CustomPaginationActionsTable extends React.Component {
           </div>
       )
     }
-    if(this.props.id > 0){
+    if(this.props.user_name !== ""){
 
     
     return (
@@ -262,7 +246,7 @@ class CustomPaginationActionsTable extends React.Component {
                 <Table className={classes.table}>
                     <TableHead>
                         <TableRow>
-                            <TableCell style={{fontSize:'24px', fontWeight:'600'}}>ID</TableCell>
+                            <TableCell style={{fontSize:'24px', fontWeight:'600'}}>NO</TableCell>
                             <TableCell style={{fontSize:'24px', fontWeight:'600'}}>NAMA</TableCell>
                             <TableCell style={{fontSize:'24px', fontWeight:'600'}}>HARGA</TableCell>
                             <TableCell style={{fontSize:'24px', fontWeight:'600'}}>DISC</TableCell>
@@ -283,8 +267,21 @@ class CustomPaginationActionsTable extends React.Component {
                         
                         {this.state.edit === index ? <TableCell><input style={{width : '50px'}} defaultValue={row.product_quantity} onChange={this.qtyValidation} type='number' ref='qtyEdit' className='form-control'/></TableCell>:  <TableCell>{row.product_quantity}</TableCell>}
                         <TableCell>{formatMoney(row.product_quantity*(row.product_price - (row.product_price*(row.product_discount/100))))}</TableCell>
-                        {this.state.edit === index ?  <TableCell><input type='button' value='cancel' onClick={() => this.setState({edit : -1})} className='btn btn-danger mr-2'/><input type='button' value='save' onClick={()=>this.onBtnSave(row)} className='btn btn-success mr-2'/></TableCell>  :
-                        <TableCell><input type='button' value='edit' onClick={() => this.setState({edit : index})} className='btn btn-primary mr-2'/> <input type='button' value='delete' onClick={()=>this.onBtnDelete(row.id)} className='btn btn-danger mr-2'/></TableCell>}
+                        {this.state.edit === index ?  
+
+                        <TableCell>
+                              <tr> <i class="fas fa-window-close"  onClick={() => this.setState({edit : -1})} style={{fontSize :"20px",color:"#6C0A27"}} ></i> </tr>
+                              <tr> <i class="fas fa-save" onClick={()=>this.onBtnSave(row)} style={{fontSize :"20px",color:"#365516"}}></i> </tr> 
+                                {/* <input type='button' value='cancel' onClick={() => this.setState({edit : -1})} className='btn btn-danger mr-2'/>
+                                <input type='button' value='save' onClick={()=>this.onBtnSave(row)} className='btn btn-success mr-2'/> */}
+                        </TableCell> :
+                        <TableCell> 
+
+                           <tr> <i class="fas fa-edit" onClick={() => this.setState({edit : index})} style={{fontSize :"20px",color:"#27418A"}}></i> </tr>
+                          <tr> <i class="fas fa-trash-alt" onClick={()=>this.onBtnDelete(row.id)} style={{fontSize :"20px",color:"#8A2E27"}}></i> </tr>
+                          {/* <input type='button' value='edit' onClick={() => this.setState({edit : index})} className='btn btn-primary mr-2'/> 
+                          <input type='button' value='delete' onClick={()=>this.onBtnDelete(row.id)} className='btn btn-danger mr-2'/> */}
+                        </TableCell>}
 
                         </TableRow>
                     ))}
@@ -312,6 +309,7 @@ class CustomPaginationActionsTable extends React.Component {
                     </TableRow>
                     </TableFooter>
                 </Table>
+                
                 </div>
             </Paper>
             <Paper className='mt-4'>

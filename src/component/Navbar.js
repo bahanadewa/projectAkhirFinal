@@ -46,7 +46,9 @@ class MyNavbar extends Component {
       return (
         <div>
           <Navbar light expand="md">
-            <NavbarBrand > <Link to="/"><img src="https://cdn0.iconfinder.com/data/icons/cartoon-food/512/Food_512-07.png" style={{marginRight:'10px'}} alt="brand" width="50px"/> </Link>  F O O D Q O M A</NavbarBrand>
+            <NavbarBrand  className="font1"> 
+                   <Link to="/"> <img src ="https://image.flaticon.com/icons/png/512/129/129356.png" width="30px" height="30px" /> </Link>  F O O D Q O M A
+            </NavbarBrand>
   
             <NavbarToggler onClick={this.toggle} />
             <Collapse isOpen={this.state.isOpen} navbar>
@@ -57,9 +59,6 @@ class MyNavbar extends Component {
                       </NavItem>
                       <NavItem className="hover" style={{marginRight:"20px", marginLeft:"20px"}}>
                               <Link to="/our-menu"><NavLink  style={{fontSize:"14px"}}>Our Menu </NavLink></Link>
-                      </NavItem>
-                      <NavItem className="hover" style={{marginRight:"20px", marginLeft:"20px"}}>
-                              <Link to="/menu"><NavLink  style={{fontSize:"14px"}}>Discount </NavLink></Link>
                       </NavItem>
                       <NavItem className="hover" style={{marginRight:"20px", marginLeft:"20px"}}>
                               <Link to="/menu"><NavLink  style={{fontSize:"14px"}}> Category </NavLink></Link>
@@ -91,7 +90,7 @@ class MyNavbar extends Component {
       return (
         <div>
           <Navbar light expand="md">
-            <NavbarBrand > <Link to="/"><img src="https://cdn0.iconfinder.com/data/icons/cartoon-food/512/Food_512-07.png" style={{marginRight:'10px'}} alt="brand" width="50px"/> </Link>  F O O D Q O M A</NavbarBrand>
+            <NavbarBrand className="font1" > <Link to="/"> <img src ="https://image.flaticon.com/icons/png/512/129/129356.png" width="30px" height="30px" /> </Link>  F o o d Q o m a</NavbarBrand>
   
             <NavbarToggler onClick={this.toggle} />
             <Collapse isOpen={this.state.isOpen} navbar>
@@ -105,10 +104,7 @@ class MyNavbar extends Component {
                       </NavItem>
                       <NavItem className="hover" style={{marginRight:"15px", marginLeft:"20px"}}>
                               <Link to="/menu"><NavLink  style={{fontSize:"14px"}}>Discount </NavLink></Link>
-                      </NavItem>
-                      <NavItem className="hover" style={{marginRight:"15px", marginLeft:"20px"}}>
-                              <Link to="/menu"><NavLink  style={{fontSize:"14px"}}> Category </NavLink></Link>
-                      </NavItem>   
+                      </NavItem>  
               </Nav>
   
               <Nav className="ml-auto" navbar>
@@ -143,10 +139,15 @@ class MyNavbar extends Component {
                                                      <DropdownItem style={{color:"#7F7F7F"}}> Manage Category </DropdownItem>
                                                      </Link>
                                                       : null}
+                                                  {this.props.role === "admin"?
+                                                     <Link to ="Manage-transaction" style={{textDecoration:"none"}}>
+                                                     <DropdownItem style={{color:"#7F7F7F"}}> Manage Transaction </DropdownItem>
+                                                     </Link>
+                                                      : null}
 
                                                     <Link to="/transaction-history" style={{textDecoration:"none"}} >
                                                     <DropdownItem style={{color:"#7F7F7F"}}>
-                                                        Transaction History
+                                                        History
                                                     </DropdownItem>
                                                     </Link>
                                                     

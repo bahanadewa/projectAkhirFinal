@@ -5,21 +5,23 @@ import { Route, withRouter, Switch } from 'react-router-dom'
 import {keepLogIn,cartCount,cookieChecked} from './1 action'
 
 import cookie from 'universal-cookie'
-import Register from './component/register'
-import Login from './component/login'
+import Register from './component/Register'
+import Login from './component/Login'
 import Navbar from './component/Navbar'
-import Home from './component/home'
-import ListMenu from './component/listMenu'
-import ListDetail from './component/listDetail'
-import ManageMenu from './component/manageMenu'
-import Cart from './component/cart'
-import About from './component/about'
+import Home from './component/Home'
+import ListMenu from './component/ListMenu'
+import ListDetail from './component/ListDetail'
+import ManageMenu from './component/ManageMenu'
+import Cart from './component/Cart'
+import About from './component/About'
 import PageNotFound from './component/404'
-import History from './component/transactionHistory'
-import ScrollToTop from './component/scrollToTop'
-import Footer from './component/footer'
-import Addproduct from './component/addproductadmin'
-import ManageCategory from './component/managecategory'
+import History from './component/TransactionHistory'
+import ScrollToTop from './component/ScrollToTop'
+import Footer from './component/Footer'
+import Addproduct from './component/AddProductAdmin'
+import ManageCategory from './component/ManageCategory'
+import VerivyPayment from './component/VerifyPayment'
+import ManageTransaction from './component/ManageTrasaction'
 
 
 const objCookie = new cookie () // objCookie dinamain terserah si penulis
@@ -53,15 +55,12 @@ class App extends Component {
                   <Route path="/manage-category" component ={ManageCategory} exact/>
                   <Route path="/about" component ={About} exact/>
                   <Route path="/transaction-history" component ={History} exact/>
+                  <Route path="/Verify-payment" component ={VerivyPayment} exact/>
+                  <Route path="/Manage-transaction" component ={ManageTransaction} exact/>
                   <Route path='*' component={PageNotFound} exact />      
             </Switch>
-           
         </ScrollToTop>
          <Footer/>
-        
-
-        
-        
       </div>
     );
   }

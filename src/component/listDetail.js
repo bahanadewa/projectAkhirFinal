@@ -36,19 +36,15 @@ class ProductDetail extends React.Component{
     }
 
     addcart =()=>{
-        var product_quantity = parseInt (this.refs.quantity.value)
-        var product_idUser = this.props.id
-        var product_username = this.props.user
-        var product_name = this.state.productname.name
-        var product_price = this.state.productname.price
-        var product_category = this.state.productname.category
-        var product_img = this.state.productname.img
-        var product_id = this.state.productname.id
-        var product_discount = this.state.productname.discount
-        
-        var newdata = {product_idUser , product_username, product_name,product_price, product_category,product_img,product_id,product_quantity,product_discount}
 
-        Axios.get(urlAPI+'/cart?product_idUser='+this.props.id+"&product_id="+newdata.product_id)
+        var product_quantity = parseInt (this.refs.quantity.value)
+        var product_username = this.props.user
+        var product_id = this.state.productname.id
+ 
+        
+        var newdata ={product_quantity,product_username,product_id}
+
+        Axios.get(urlAPI+'/allcart?product_username='+this.props.user+"&product_id="+newdata.product_id)
         .then((res)=>{
             if (res.data.length>0){
                 product_quantity = res.data[0].product_quantity+product_quantity
@@ -60,7 +56,7 @@ class ProductDetail extends React.Component{
                     icon: "success",
                   });
             }else{
-                Axios.post(urlAPI+'/cart',newdata)
+                Axios.post(urlAPI+'/addcart',newdata)
                 swal({
 
                     title: "Add to cart success",
@@ -76,13 +72,13 @@ class ProductDetail extends React.Component{
     }
 
     render(){
-        var {product_name, product_img,product_serving,product_calories,product_fat,product_protein,product_carb,product_fiber,product_category,product_price,product_discount} = this.state.productname
+        var {product_name, product_img,product_serving,product_calories,product_fat,product_protein,product_carb,product_fiber,product_category,product_price,product_discount,product_description,id_product} = this.state.productname
         return(
             <div className="container">
                     <div className="row">
                         <div className="col-md-4">
                                 <div className="card" style={{width: '100%'}}>
-                                    <img src={urlAPI+"/"+product_img} className="card-img-top" alt="..." />
+                                    <img height="370px" width="100%" src={urlAPI+"/"+product_img} className="card-img-top" alt="..." />
                                 </div>
                         </div>
                         <div className="col-md-8">
@@ -117,8 +113,9 @@ class ProductDetail extends React.Component{
                                         <div className="col-md-6">
                                                 <div style={{marginTop:'10px',
                                                             color:'#606060',
-                                                            fontWeight:'700'}}> Note for seller (Optional)</div>
-                                                <input type="text" className="form-control" style={{marginTop:'13px'}} placeholder="Ex : no MSG" />
+                                                            fontWeight:'700'}}> Description </div>
+                                                <p style={{marginTop:'13px',
+                                                            color:'#606060'}}> {product_description}</p>     
                                         </div>
                                 </div>
 
@@ -127,21 +124,20 @@ class ProductDetail extends React.Component{
                                         <p> serving {product_serving} gr | calories {product_calories} kcal | fat {product_fat} gr| protein {product_protein} gr | carb {product_carb} gr | fiber {product_fiber} gr  </p>
                                     </div>    
                                 </div>
-
+                                
 
                                 { this.props.user ===""?
                                 <div className="row mt-4">
-                                        <button type="button" className="btn border-primary col-md-3" disabled> <i class="fas fa-archive"></i> wishlist </button>
-                                        <button type="button" className="btn btn-info col-md-3" disabled> <i class="fas fa-archive"></i> Buy now </button>
-                                        <button type="button" className="btn btn-success col-md-3" disabled> <i class="fas fa-cart-plus"></i> Add to cart </button>
+                                        <div className="col-md-8"> 
+                                            <button type="button" className="btn btn-success form-control" disabled> <i class="fas fa-cart-plus"></i> Add to cart </button>
+                                        </div>
+                                        
                                 </div>
                                 :
                                 <div className="row mt-4">
-                                        <button type="button" className="btn border-primary col-md-3" style={{margin:"5px"}} > <i class="fas fa-archive"></i> wishlist </button>
-
-                                        <button type="button" className="btn btn-info col-md-3" style={{margin:"5px"}}> <i class="fas fa-archive"></i> Buy now </button>
-
-                                        <button type="button" className="btn btn-success col-md-3" onClick={this.addcart} ref="addcart" style={{margin:"5px"}}> <i class="fas fa-cart-plus"></i>Add to cart </button>
+                                        <div className="col-md-8"> 
+                                            <button type="button" className="btn btn-success form-control" onClick={this.addcart} ref="addcart" style={{margin:"5px"}}> <i class="fas fa-cart-plus"></i>Add to cart </button>
+                                        </div>
                                 </div>
                                 }
                                 

@@ -112,7 +112,7 @@ render() {
                             <div className="form-group row">
                                 <label htmlFor="inputPassword3" className="col-sm-2 col-form-label"> Calories</label>
                                 <div className="col-md">
-                                    <input type="number" className="form-control" ref='product_calories'  placeholder="Price" />
+                                    <input type="number" className="form-control" ref='product_calories'  placeholder="Calories" />
                                 </div>
                             </div>
                             <div className="form-group row">

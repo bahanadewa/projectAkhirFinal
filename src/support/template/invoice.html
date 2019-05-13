@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <style type="text/css">
+    body{
+        zoom: 70%;
+    }
+    
+    </style>
+
+
+
+    <title>INVOICE</title>
+  </head>
+  <body>
+    <div class="container">
+        <h1>Tagihan Untuk {{username}}</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <td>Product name</td>
+                <td>quantity</td>
+                <td>price</td>
+                <td>discount</td>
+                <td>Total</td>
+                <td>Date</td>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each result6}}
+            <tr>
+                <td>{{product_name}}</td>
+                <td>{{quantity}}</td>
+                <td>{{product_price}}</td>
+                <td>{{product_discount}}</td>
+                <td>{{historyD_total}}</td>
+                <td>{{date}}</td>
+            </tr>
+            {{/each}}
+            <tr>
+                <td><b>Total Yang Harus Di Bayar {{totalsemua}}</b></td>
+            </tr>
+        </tbody>
+    </table>
+    
+    </div>
+  </body>
+</html>

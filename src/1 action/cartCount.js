@@ -5,7 +5,7 @@ export const cartCount = (int) => {
     return (dispatch) => {
         Axios.get(urlAPI + '/user?username='+ int)
             .then((res)=>{
-                    Axios.get(urlAPI + '/cart?product_idUser='+ res.data[0].id)
+                    Axios.get(urlAPI + '/cart?product_username='+ res.data[0].username)
                         .then((res) => {
                                 dispatch({
                                     type : 'CART_COUNT',

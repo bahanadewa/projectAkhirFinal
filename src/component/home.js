@@ -1,7 +1,7 @@
 import React from 'react'
-import Carousel1 from './carousel-1'
-import Carousel2 from './carousel-2'
-import Carousel3 from './carousel-3'
+import Carousel1 from './Carousel-1'
+import Carousel2 from './Carousel-2'
+import Carousel3 from './Carousel-3'
 
 class Home extends React.Component{
     render(){

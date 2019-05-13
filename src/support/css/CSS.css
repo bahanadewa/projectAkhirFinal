@@ -1,3 +1,8 @@
+
+.font1{
+    font-family: 'Pacifico', cursive;
+}
+
 .img{
  background-image: url("../img/cupcake-icing-wallpaper.jpg");
  height: 750px;
@@ -17,4 +22,8 @@
 .hover:hover {
     background-color: #95BADA ;
     color: whitesmoke;
+}
+
+.imglist{
+    background-image: url("../img/photo-1470790376778-a9fbc86d70e2.jpeg")
 }

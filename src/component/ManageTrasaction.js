@@ -21,6 +21,7 @@ import { TableHead } from '@material-ui/core';
 import { cartCount} from '../1 action'
 import PageNotFound from './404';
 import cookie from 'universal-cookie'
+import swal from 'sweetalert'
 
 function formatMoney(number) {
     return number.toLocaleString('in-RP', { style: 'currency', currency: 'IDR' });
@@ -125,9 +126,9 @@ class CustomPaginationActionsTable extends React.Component {
   state = {
     rows: [],
     page: 0,
-    rowsPerPage: 5,
+    rowsPerPage: 10,
     edit : -1,
-    historyDetail : [],
+    ManageTransaction : [],
     isDetail : false
   };
   componentDidMount(){
@@ -135,8 +136,7 @@ class CustomPaginationActionsTable extends React.Component {
   }
 
   getData = () => {
-    var getcookie = objcookie.get('memory-cookie')
-    Axios.get(urlAPI + '/showhistory?username=' +getcookie)
+    Axios.get(urlAPI + '/GetDataManageTransaction')
     .then((res) => {
         this.setState({rows : res.data})
     })
@@ -151,37 +151,63 @@ class CustomPaginationActionsTable extends React.Component {
     this.setState({ page: 0, rowsPerPage: event.target.value });
   };
 
-  onBtnDetail = (item) => {
-
-  }
-
-  historyDetail=(id)=>{
-    Axios.get(urlAPI +'/showhistorydetail/'+id)
+ 
+  TrasactionDetail=(id)=>{
+    Axios.get(urlAPI +'/GetDataManageTransaction/'+id)
     .then((res) => {
-        this.setState({historyDetail: res.data,isDetail:true})
+        this.setState({ManageTransaction: res.data, isDetail:true})
     })
     .catch((err) => console.log(err))
 
   }
 
-  renderHistoryDetail = () => {
-    var jsx = this.state.historyDetail.map((row,index) => {
+  renderManageTransaction = () => {
+    var jsx = this.state.ManageTransaction.map((row,index) => {
       return(
         <TableRow key={index}>
           <TableCell>{index+1}</TableCell>
           <TableCell>
-            <img style={{width:"50px", height:"50px"}} src={urlAPI+"/"+row.product_img} className="card-img-top" alt="..." />
+            <img style={{width:"300px", height:"300px"}} src={urlAPI+"/"+row.img_payment} className="card-img-top" alt="..." />
           </TableCell>
+          <TableCell>{row.date}</TableCell>
+          <TableCell>{formatMoney  (row.total)}</TableCell>
           <TableCell>
-              {row.product_name}
+               <input type='button' className='btn btn-info' value='verify' onClick={()=>this.verify(row.id)} /> 
+               <input type='button' className='btn btn-danger' value='decline' onClick={()=>this.decline(row.id)} /> 
           </TableCell>
-          <TableCell>{row.quantity}</TableCell>
-          <TableCell>{formatMoney(row.total)} </TableCell>
         </TableRow>
       )
     })
     return jsx
   }
+
+  verify=(id)=>{
+    Axios.put(urlAPI+'/VerifyDataManageTransaction/'+id) 
+    .then((res)=>{
+        swal('VERIFIED','SUCCESS','success')
+        this.getData()
+        console.log(res)
+    })
+    .catch((err)=>{
+        console.log(err)
+    })
+
+  }
+
+  decline=(id)=>{
+    Axios.put(urlAPI+'/RejectDataManageTransaction?id='+id+'&username='+this.props.username) 
+    .then((res)=>{
+        swal('DECLINE','SUCCESS','success')
+        this.getData()
+        console.log(res)
+    })
+    .catch((err)=>{
+        console.log(err)
+    })
+  }
+
+
+
 
 
   render() {
@@ -211,10 +237,12 @@ class CustomPaginationActionsTable extends React.Component {
                         <TableCell>
                             {row.username}
                         </TableCell>
-                        <TableCell>{formatMoney (row.total)}</TableCell>
+                        <TableCell>{row.total}</TableCell>
                         <TableCell>{row.date} </TableCell>
                         <TableCell>{row.status} </TableCell>
-                        <TableCell><input type='button' value='Detail' onClick={()=>this.historyDetail(row.id)} className='btn btn-danger mr-2'/></TableCell>
+  
+                        <TableCell><input type='button' value='Detail' onClick={()=>this.TrasactionDetail(row.id)} className='btn btn-danger mr-2'/></TableCell>
+                        
 
                         </TableRow>
                     ))}
@@ -227,7 +255,7 @@ class CustomPaginationActionsTable extends React.Component {
                     <TableFooter>
                     <TableRow>
                         <TablePagination
-                        rowsPerPageOptions={[5, 10, 25]}
+                        rowsPerPageOptions={[10, 20, 30]}
                         colSpan={3}
                         count={rows.length}
                         rowsPerPage={rowsPerPage}
@@ -249,20 +277,21 @@ class CustomPaginationActionsTable extends React.Component {
                 <TableHead>
                 <TableRow>
                     <TableCell style={{fontSize:'24px', fontWeight:'600'}}>NO</TableCell>
-                    <TableCell style={{fontSize:'24px', fontWeight:'600'}}>PRODUCT IMG</TableCell>
-                    <TableCell style={{fontSize:'24px', fontWeight:'600'}}>PRODUCT NAME</TableCell>
-                    <TableCell style={{fontSize:'24px', fontWeight:'600'}}>QUANTITIES</TableCell>
-                    <TableCell style={{fontSize:'24px', fontWeight:'600'}}>TOTAL</TableCell>
+                    <TableCell style={{fontSize:'24px', fontWeight:'600'}}>TRANSACTION IMG</TableCell>
+                    <TableCell style={{fontSize:'24px', fontWeight:'600'}}>DATE</TableCell>
+                    <TableCell style={{fontSize:'24px', fontWeight:'600'}}>TOTAL ITEM</TableCell>
+                    <TableCell style={{fontSize:'24px', fontWeight:'600'}}>ACTION</TableCell>
                 </TableRow>                
                 </TableHead>
                 <TableBody>
-                        {this.renderHistoryDetail()}
+                        {this.renderManageTransaction()}
 
                 </TableBody>
                 <TableFooter>
                         <TableRow>
                           <TableCell> <input type='button' className='btn btn-primary' value='close' onClick={()=> this.setState({isDetail:false, historyDetail:[]})} /> </TableCell>
                         </TableRow>
+                        
                 </TableFooter>      
               </Table>
             </Paper> : null}

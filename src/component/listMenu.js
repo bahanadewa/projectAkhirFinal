@@ -5,12 +5,13 @@ import {Link} from 'react-router-dom'
 import {connect} from 'react-redux'
 import swal from 'sweetalert'
 import {cartCount} from '../1 action'
+import '../support/css/CSS.css'
 
 
 
 class Product extends React.Component {
 
-    state = {listProduct : [], cart:[]}
+    state = {listProduct : [], cart:[],searchDataname : ""}
  
     componentDidMount(){
         this.getDataProduct()
@@ -24,24 +25,18 @@ class Product extends React.Component {
 
     addproduct = (obj)=> {
         var product_quantity = 1
-        var product_idUser = this.props.id
         var product_username = this.props.username
-        var product_name = obj.name
-        var product_price = obj.price
-        var product_category = obj.category
-        var product_img = obj.img
         var product_id = obj.id
-        var product_discount = obj.discount
+ 
 
-        var newdata ={product_idUser,product_username,product_name,product_price,
-                        product_category,product_img,product_id,product_quantity,product_discount}
+        var newdata ={product_quantity,product_username,product_id}
                         
-        Axios.get(urlAPI + '/cart?product_name=' + newdata.product_name + '&idUser=' + this.props.id).then((res) => {
+        Axios.get(urlAPI + '/allcart?product_id=' + newdata.product_id + '&product_username=' + this.props.username).then((res) => {
             if(res.data.length > 0){
                 Axios.put(urlAPI + '/cart/' + res.data[0].id, {...newdata, product_quantity: parseInt(res.data[0].product_quantity) + newdata.product_quantity })
                 swal('Status Add' , 'Success Add to Cart' , 'success')
             }else{
-                Axios.post(urlAPI + '/cart',newdata)
+                Axios.post(urlAPI + '/addcart',newdata)
                 .then((res) => {
                     swal('Status Add' , 'Success Add to Cart' , 'success')
                     this.props.cartCount(this.props.username)
@@ -51,54 +46,40 @@ class Product extends React.Component {
         })
     }
 
-
+    getdatasearch=()=>{
+        var inputname = this.refs.searchbyname.value
+        this.setState({searchDataname : inputname})
+      }
+    
     renderProductJsx = ()=>{
-        var jsx = this.state.listProduct.map((val)=>{
+        var arrSearchandFilter = this.state.listProduct.filter((val)=>{
+            return (val.product_name.toLowerCase().startsWith(this.state.searchDataname)) 
+        })
+        var jsx = arrSearchandFilter.map((val)=>{
             return(
-                <div className="card col-md-3 mr-3 mt-3" style={{width: '18rem'}}>
+                <div className="card col-md-3 mr-3 mt-3 imglist" style={{width: '18rem'}}>
                     <Link to={'/detail-menu/'+val.id}>
-                        <img height="280px" width="100%" src={urlAPI+"/"+val.product_img} className="card-img-top" alt="..." />
+                        <img height="250px" width="100%" src={urlAPI+"/"+val.product_img} className="card-img-top mt-2" alt="..." />
                     </Link>
 
                     <div className="card-body">
                         <h2 className="card-text" style={{fontSize:"15px",fontWeight:"bold"}}>{val.product_name}</h2>
-                        <h5 className="card-text " style={{fontSize:"13px"}}> Nutrition Information </h5>
-
-                    <table className="ml-3 mt-0" >
-                        <tr style={{fontSize:"10px", color:'#7F7F7F'}}> 
-                            <td>serving  </td>
-                            <td> : {val.product_serving} gr</td>
-                        </tr>
-                        <tr style={{fontSize:"10px", color:'#7F7F7F'}}>
-                            <td>calories </td>
-                            <td> : {val.product_calories} gr</td>
-                        </tr>
-                        <tr style={{fontSize:"10px", color:'#7F7F7F'}}>
-                            <td>fat </td>
-                            <td> : {val.product_fat} gr</td>
-                        </tr>
-                        <tr style={{fontSize:"10px", color:'#7F7F7F'}}>
-                            <td>protein </td>
-                            <td> : {val.product_protein} gr</td>
-                        </tr>
-                        <tr style={{fontSize:"10px", color:'#7F7F7F'}}>
-                            <td>carb </td>
-                            <td> : {val.product_carb} gr</td>
-                        </tr>
-                        <tr style={{fontSize:"10px", color:'#7F7F7F'}}>
-                            <td>fiber </td>
-                            <td> : {val.product_fiber} gr</td>
-                        </tr>
-                    </table>
+                        {/* <h5 className="card-text " style={{fontSize:"13px"}}> Nutrition Information </h5> */}
 
                         { val.product_discount > 0 ?
                         <p className="card-text" style={{textDecoration:"line-through", color:'red',display:"inline"}}> Rp {val.product_price}</p> 
                         : null
                         }
-
-
                         <p className="card-text" style={{display:"inline",fontWeight:'500'}}> Rp {val.product_price- (val.product_price*val.product_discount/100)} </p>
-                        <button className="d-block btn btn-info mt-2" onClick={()=> this.addproduct(val)}  style={{height:"34px", width:"100%"}}> <i class="fas fa-cart-arrow-down"></i> add to cart </button>
+
+
+
+                        { this.props.username ===""?
+                               <button className="d-block btn btn-info mt-2" disabled style={{height:"34px", width:"100%"}}> <i class="fas fa-cart-arrow-down"></i> add to cart </button>
+                        :
+                            <button className="d-block btn btn-info mt-2" onClick={()=> this.addproduct(val)}  style={{height:"34px", width:"100%"}}> <i class="fas fa-cart-arrow-down"></i> add to cart </button>
+                        }
+
                         
                     </div>
                 </div>
@@ -107,9 +88,17 @@ class Product extends React.Component {
         return jsx
     } 
 
+   
+
     render (){
         return (
             <div className="container">
+                 <div className="row justify-content-center">
+                    <div className="col-md-8 ">
+                        <input type='text' placeholder='SEARCH BY NAME' ref="searchbyname" style={{marginBottom:'10px'}} className='form-control' onChange={this.getdatasearch}/>
+                    </div>
+
+                </div>
                 <div className="row justify-content-center">
                     {this.renderProductJsx()}
                 </div>
