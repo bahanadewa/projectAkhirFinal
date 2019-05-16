@@ -275,6 +275,8 @@ app.get('/getallproduct/:id',(req,res)=>{
     })
 })
 
+
+
 // =========================== Category ============================
 
 app.get('/getallcategory',(req,res)=>{
@@ -365,6 +367,29 @@ app.delete('/deleteCategory/:id', (req,res)=>{
                     res.send(result2)
                 })
     })
+})
+
+app.get('/getsearch/:id',(req,res)=>{
+    try{
+         var id = req.params.id
+        var sql = `select * from category where id=${id}`
+    db.query(sql,(err,result)=>{
+        if(err) throw result
+            var id_category =(result[0].id)
+            var sql1 = `select p.id, product_name, product_img, product_serving,
+            product_serving,product_calories,product_fat, 
+            product_protein, product_carb, product_fiber, 
+            product_price, product_discount, product_description, c.product_category
+            from product p left join category c on id_category = c.id where id_category=${id_category} order by p.id  asc ;`
+                db.query(sql1,(err1,result1)=>{
+                    if (err1) throw err1
+                    res.send(result1)
+                })
+        })
+    }catch(err){
+        res.send(err)
+    }
+   
 })
 
 // =========================== Cart ============================

@@ -22,6 +22,7 @@ import Addproduct from './component/AddProductAdmin'
 import ManageCategory from './component/ManageCategory'
 import VerivyPayment from './component/VerifyPayment'
 import ManageTransaction from './component/ManageTrasaction'
+import Category from './component/Category'
 
 
 const objCookie = new cookie () // objCookie dinamain terserah si penulis
@@ -58,6 +59,7 @@ class App extends Component {
                       <Route path="/transaction-history" component ={History} exact/>
                       <Route path="/Verify-payment" component ={VerivyPayment} exact/>
                       <Route path="/Manage-transaction" component ={ManageTransaction} exact/>
+                      <Route path="/category" component ={Category} exact/>
                       <Route path='*' component={PageNotFound} exact />      
                 </Switch>
             </ScrollToTop>

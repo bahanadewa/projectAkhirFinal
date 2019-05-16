@@ -316,7 +316,8 @@ class CustomPaginationActionsTable extends React.Component {
 
   renderJsx =()=>{
       var arrSearchandFilter = this.state.rows.filter((val)=>{
-          return (val.product_name.toLowerCase().startsWith(this.state.searchDataname)) && (val.product_category.toLowerCase().startsWith(this.state.searchDatakategory))
+          return (val.product_name.toLowerCase().startsWith(this.state.searchDataname)) 
+          // && (val.product_category.toLowerCase().startsWith(this.state.searchDatakategory))
       })
       var jsx = arrSearchandFilter.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage).map((val)=>{
           return(
@@ -325,7 +326,7 @@ class CustomPaginationActionsTable extends React.Component {
                     {val.id}
                 </TableCell>
                 <TableCell align="">{val.product_name}</TableCell>
-                <TableCell align=""><img src={urlAPI+"/"+val.product_img} width="250px" height="250px"/></TableCell>
+                <TableCell align=""><img src={urlAPI+"/"+val.product_img} width="150px" height="150px"/></TableCell>
                 <TableCell align="">{val.product_serving}</TableCell>
                 <TableCell align="">{val.product_calories}</TableCell>
                 <TableCell align="">{val.product_fat}</TableCell>
@@ -381,9 +382,9 @@ class CustomPaginationActionsTable extends React.Component {
                     <div className="col-md-6">
                         <input type='text' placeholder='SEARCH BY NAME' ref="searchbyname" style={{marginBottom:'10px'}} className='form-control' onChange={this.getdatasearch}/>
                     </div>
-                    <div className="col-md-6">
+                    {/* <div className="col-md-6">
                         <input type='text' placeholder='SEARCH BY CATEGORY' ref="searchbycategory" style={{marginBottom:'10px'}} className='form-control' onChange={this.getdatasearch}/>
-                    </div>
+                    </div> */}
                 </div>
                 <Paper className={classes.root}>
                     <div className={classes.tableWrapper}>

@@ -98,7 +98,10 @@ class MyNavbar extends Component {
                       </NavItem>
                       <NavItem className="hover" style={{marginRight:"15px", marginLeft:"20px"}}>
                               <Link to="/our-menu"><NavLink  style={{fontSize:"14px"}}>Our Menu </NavLink></Link>
-                      </NavItem>  
+                      </NavItem> 
+                      <NavItem className="hover" style={{marginRight:"15px", marginLeft:"20px"}}>
+                              <Link to="/category"><NavLink  style={{fontSize:"14px"}}> Category </NavLink></Link>
+                      </NavItem> 
               </Nav>
   
               <Nav className="ml-auto" navbar>
