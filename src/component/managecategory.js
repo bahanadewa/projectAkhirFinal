@@ -82,6 +82,8 @@ class Category extends React.Component{
         this.setState({searchData : input})
       }
 
+    
+
     renderCategory = () => {
         var arrSearchandFilter = this.state.getdatacategory.filter((val)=>{
             return val.product_category.toLowerCase().startsWith(this.state.searchData)

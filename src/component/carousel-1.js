@@ -72,7 +72,7 @@ class MyCarousel extends Component {
           key={item.src}
         >
           <img src={item.src} alt={item.altText} height="700px" width="100%" />
-          {/* <CarouselCaption captionText={item.caption} captionHeader={item.caption} /> */}
+          <CarouselCaption captionText={item.caption} captionHeader={item.caption} />
         </CarouselItem>
       );
     });
@@ -82,6 +82,7 @@ class MyCarousel extends Component {
         activeIndex={activeIndex}
         next={this.next}
         previous={this.previous}
+        ride={this.ride}
       >
         <CarouselIndicators items={items} activeIndex={activeIndex} onClickHandler={this.goToIndex} />
         {slides}

@@ -40,26 +40,28 @@ class App extends Component {
 
   render() {
     return (
-      <div>
-        <Navbar/>
-        <ScrollToTop>
-            <Switch>
-                  <Route path="/" component={Home} exact/>
-                  <Route path="/login" component={Login} exact/>
-                  <Route path="/register" component={Register} exact/>
-                  <Route path="/our-menu" component={ListMenu} exact/>
-                  <Route path="/detail-menu/:id" component ={ListDetail} exact/>
-                  <Route path="/cart" component ={Cart} exact/>
-                  <Route path="/manage-menu" component ={ManageMenu} exact/>
-                  <Route path="/add-product" component ={Addproduct} exact/>
-                  <Route path="/manage-category" component ={ManageCategory} exact/>
-                  <Route path="/about" component ={About} exact/>
-                  <Route path="/transaction-history" component ={History} exact/>
-                  <Route path="/Verify-payment" component ={VerivyPayment} exact/>
-                  <Route path="/Manage-transaction" component ={ManageTransaction} exact/>
-                  <Route path='*' component={PageNotFound} exact />      
-            </Switch>
-        </ScrollToTop>
+      <div style={{position:"relative", minHeight:"100vh"}}>
+        <div style={{paddingBottom:"200px"}}>
+            <Navbar/>
+            <ScrollToTop>
+                <Switch>
+                      <Route path="/" component={Home} exact/>
+                      <Route path="/login" component={Login} exact/>
+                      <Route path="/register" component={Register} exact/>
+                      <Route path="/our-menu" component={ListMenu} exact/>
+                      <Route path="/detail-menu/:id" component ={ListDetail} exact/>
+                      <Route path="/cart" component ={Cart} exact/>
+                      <Route path="/manage-menu" component ={ManageMenu} exact/>
+                      <Route path="/add-product" component ={Addproduct} exact/>
+                      <Route path="/manage-category" component ={ManageCategory} exact/>
+                      <Route path="/about" component ={About} exact/>
+                      <Route path="/transaction-history" component ={History} exact/>
+                      <Route path="/Verify-payment" component ={VerivyPayment} exact/>
+                      <Route path="/Manage-transaction" component ={ManageTransaction} exact/>
+                      <Route path='*' component={PageNotFound} exact />      
+                </Switch>
+            </ScrollToTop>
+        </div>
          <Footer/>
       </div>
     );

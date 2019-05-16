@@ -22,6 +22,7 @@ import {Button,Icon,Input,Label} from 'semantic-ui-react';
 import swal from "sweetalert";
 import {connect} from 'react-redux'
 import PageNotFound from './404'
+import queryString from 'query-string'
 // import PageNotFound from '../pageNotFound'
 
 
@@ -88,8 +89,8 @@ class TablePaginationActions extends React.Component {
         </IconButton>
       </div>
     );
+    }
   }
-}
 
 TablePaginationActions.propTypes = {
   classes: PropTypes.object.isRequired,
@@ -134,12 +135,22 @@ class CustomPaginationActionsTable extends React.Component {
   componentDidMount(){
         this.getDataApi()
         this.getDataCategory()
+        this.getDataUrl()
   }
 
   getDataApi = () =>{
         Axios.get(urlAPI+'/getallproduct')
-        .then ((res)=> this.setState({rows : res.data ,searchDataname : "",searchDatakategory :""}))
+        .then ((res)=> this.setState({rows : res.data }))
         .catch((err)=> console.log(err))
+  }
+
+  getDataUrl=()=>{
+    // console.log(this.props.location.search)
+    // console.log(queryString.parse(this.props.location.search))
+    if(this.props.location.search){
+      var Obj = queryString.parse(this.props.location.search)
+      this.setState({searchDataname : Obj.product ? Obj.product : '',  searchDatakategory: Obj.category ? Obj.category : ""})
+    }
   }
 
   getDataCategory = ()=>{
@@ -198,7 +209,35 @@ class CustomPaginationActionsTable extends React.Component {
     var inputname = this.refs.searchbyname.value
     var inputcategory = this.refs.searchbycategory.value
     this.setState({searchDataname : inputname,searchDatakategory :inputcategory})
+    this.pushurl()
   }
+
+  pushurl=()=>{
+    var newLink = `/manage-menu`
+    var params = []
+
+    if(this.refs.searchbyname.value){
+      params.push({
+        params :'product' ,
+        value : this.refs.searchbyname.value
+      })
+    }
+    if(this.refs.searchbycategory.value){
+      params.push({
+        params :'category' ,
+        value : this.refs.searchbycategory.value
+      })
+    }
+    for(var i =0; i< params.length; i++){
+      if(i===0){
+        newLink+='?' + params[i].params+'='+params[i].value
+      }else{
+        newLink += '&' + params[i].params+'='+params[i].value
+      }
+    }
+    this.props.history.push(newLink)
+
+}
 
 
   renderOptionCatrgory =()=>{

@@ -587,7 +587,7 @@ app.put('/payment-verified',uploadverify.single('payment_verification'),(req, re
         newData.img_payment = req.file.path
         console.log((req.file.img_payment))
 
-        var sql = `update history set img_payment = '${newData.img_payment}', status ="diproses" where username ="${username}" and id=${id};`
+        var sql = `update history set img_payment = '${newData.img_payment}', status ="DIPROSES" where username ="${username}" and id=${id};`
         db.query(sql,newData, (err, result)=>{
                     if(err) throw err
                     res.send('BERHASIL UPLOAD VERIFIKASI PEMBAYARAN')
@@ -600,7 +600,7 @@ app.put('/payment-verified',uploadverify.single('payment_verification'),(req, re
 
 app.get('/getdatahistory',(req,res)=>{
     var username = req.query.username
-    var sql = `select * from history where username = "${username}";`
+    var sql = `select * from history where username = "${username}"  and status ="BELUM BAYAR";`
     db.query(sql,(err,result)=>{
         try{
             if (err) throw err
@@ -644,7 +644,7 @@ app.get('/GetDataManageTransaction/:id',(req,res)=>{
 
 app.put('/VerifyDataManageTransaction/:id',(req,res)=>{
     var id_history = req.params.id
-    var sql = `update history set status = "approved" where id =${id_history};`
+    var sql = `update history set status = "DISETUJUI" where id =${id_history};`
     db.query(sql,(err,result)=>{
         try{
             if (err) throw err
@@ -661,7 +661,7 @@ app.put('/RejectDataManageTransaction',(req,res)=>{
     var id = req.query.id
     var username = req.query.username
 
-    var sql = `update history set status = "Rejected" where id =${id};`
+    var sql = `update history set status = "DITOLAK" where id =${id};`
     db.query(sql,(err,result)=>{
         try{
             if (err) throw err

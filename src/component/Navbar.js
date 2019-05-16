@@ -59,21 +59,18 @@ class MyNavbar extends Component {
                       </NavItem>
                       <NavItem className="hover" style={{marginRight:"20px", marginLeft:"20px"}}>
                               <Link to="/our-menu"><NavLink  style={{fontSize:"14px"}}>Our Menu </NavLink></Link>
-                      </NavItem>
-                      <NavItem className="hover" style={{marginRight:"20px", marginLeft:"20px"}}>
-                              <Link to="/menu"><NavLink  style={{fontSize:"14px"}}> Category </NavLink></Link>
-                      </NavItem>   
+                      </NavItem> 
               </Nav>
   
               <Nav className="ml-auto" navbar>
-                      <NavItem>
+                      {/* <NavItem>
                               <div className="input-group border-right " style={{width:"300px"}}>
                                   <input type="text" ref="searchBook" className="form-control" placeholder="Search" style={{fontSize:"14px"}}/>
                                   <div className="input-group-append mr-2">
                                       <button className="btn border-secondary" type="button"><i className="fas fa-search" style={{color:"#A0B830"}} /></button>
                                   </div>
                               </div> 
-                      </NavItem>
+                      </NavItem> */}
                       <NavItem>
                               <Link to="/register"><NavLink className="btn btn-default border-secondary mr-1" style={{fontSize:"14px"}}><i className="fas fa-user-plus" /> Sign Up </NavLink></Link>
                       </NavItem>
@@ -101,21 +98,18 @@ class MyNavbar extends Component {
                       </NavItem>
                       <NavItem className="hover" style={{marginRight:"15px", marginLeft:"20px"}}>
                               <Link to="/our-menu"><NavLink  style={{fontSize:"14px"}}>Our Menu </NavLink></Link>
-                      </NavItem>
-                      <NavItem className="hover" style={{marginRight:"15px", marginLeft:"20px"}}>
-                              <Link to="/menu"><NavLink  style={{fontSize:"14px"}}>Discount </NavLink></Link>
                       </NavItem>  
               </Nav>
   
               <Nav className="ml-auto" navbar>
-                      <NavItem>
+                      {/* <NavItem>
                               <div className="input-group border-right" style={{width:"300px"}}>
                                   <input type="text" ref="searchBook" className="form-control" placeholder="Search" style={{fontSize:"14px"}}/>
                                   <div className="input-group-append mr-2">
                                       <button className="btn border-secondary" type="button"><i className="fas fa-search" style={{color:"#A0B830"}} /></button>
                                   </div>
                               </div> 
-                      </NavItem>
+                      </NavItem> */}
 
                       <NavItem>
                               <NavLink>Hi !  {this.props.username} ({this.props.role})</NavLink>

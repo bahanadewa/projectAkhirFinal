@@ -6,6 +6,7 @@ import {connect} from 'react-redux'
 import swal from 'sweetalert'
 import {cartCount} from '../1 action'
 import '../support/css/CSS.css'
+import queryString from 'query-string'
 
 
 
@@ -15,6 +16,7 @@ class Product extends React.Component {
  
     componentDidMount(){
         this.getDataProduct()
+        this.getDataUrl()
     }
 
     getDataProduct =()=> {
@@ -22,6 +24,16 @@ class Product extends React.Component {
         .then((res) => this.setState({listProduct :res.data}))
         .catch ((err)=> console.log(err))
     }
+
+    getDataUrl=()=>{
+        // console.log(this.props.location.search)
+        // console.log(queryString.parse(this.props.location.search))
+        if(this.props.location.search){
+          var Obj = queryString.parse(this.props.location.search)
+          this.setState({searchDataname  : Obj.ourmenu ? Obj.ourmenu :""})
+        }
+    }
+    
 
     addproduct = (obj)=> {
         var product_quantity = 1
@@ -49,7 +61,15 @@ class Product extends React.Component {
     getdatasearch=()=>{
         var inputname = this.refs.searchbyname.value
         this.setState({searchDataname : inputname})
+        this.pushurl()
       }
+
+    pushurl=()=>{
+        var newLink = `/our-menu`
+       
+        newLink+='?' + 'ourmenu'+'='+this.refs.searchbyname.value
+        this.props.history.push(newLink)
+    }
     
     renderProductJsx = ()=>{
         var arrSearchandFilter = this.state.listProduct.filter((val)=>{
