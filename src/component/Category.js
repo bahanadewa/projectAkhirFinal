@@ -77,7 +77,7 @@ class Product extends React.Component {
 
     render (){
         return (
-            <div className="container">
+            <div className="container" >
                 <div className="row justify-content-center mt-5">
                     <div className="col-md-4">
                         <select className='form-control form-control-sm' ref='category'>

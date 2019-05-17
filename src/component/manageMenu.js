@@ -207,8 +207,7 @@ class CustomPaginationActionsTable extends React.Component {
 
   getdatasearch=()=>{
     var inputname = this.refs.searchbyname.value
-    var inputcategory = this.refs.searchbycategory.value
-    this.setState({searchDataname : inputname,searchDatakategory :inputcategory})
+    this.setState({searchDataname : inputname})
     this.pushurl()
   }
 
@@ -220,12 +219,6 @@ class CustomPaginationActionsTable extends React.Component {
       params.push({
         params :'product' ,
         value : this.refs.searchbyname.value
-      })
-    }
-    if(this.refs.searchbycategory.value){
-      params.push({
-        params :'category' ,
-        value : this.refs.searchbycategory.value
       })
     }
     for(var i =0; i< params.length; i++){

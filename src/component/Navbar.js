@@ -57,8 +57,11 @@ class MyNavbar extends Component {
                       <NavItem className="hover" style={{marginRight:"20px", marginLeft:"20px"}}>
                               <Link to="/about"><NavLink  style={{fontSize:"14px"}}>About </NavLink></Link>
                       </NavItem>
-                      <NavItem className="hover" style={{marginRight:"20px", marginLeft:"20px"}}>
+                      {/* <NavItem className="hover" style={{marginRight:"20px", marginLeft:"20px"}}>
                               <Link to="/our-menu"><NavLink  style={{fontSize:"14px"}}>Our Menu </NavLink></Link>
+                      </NavItem>  */}
+                      <NavItem className="hover" style={{marginRight:"15px", marginLeft:"20px"}}>
+                              <Link to="/category"><NavLink  style={{fontSize:"14px"}}> Category </NavLink></Link>
                       </NavItem> 
               </Nav>
   
@@ -96,9 +99,9 @@ class MyNavbar extends Component {
                       <NavItem className="hover" style={{marginRight:"15px", marginLeft:"20px"}}>
                               <Link to="/about"><NavLink  style={{fontSize:"14px"}}>About </NavLink></Link>
                       </NavItem>
-                      <NavItem className="hover" style={{marginRight:"15px", marginLeft:"20px"}}>
+                      {/* <NavItem className="hover" style={{marginRight:"15px", marginLeft:"20px"}}>
                               <Link to="/our-menu"><NavLink  style={{fontSize:"14px"}}>Our Menu </NavLink></Link>
-                      </NavItem> 
+                      </NavItem>  */}
                       <NavItem className="hover" style={{marginRight:"15px", marginLeft:"20px"}}>
                               <Link to="/category"><NavLink  style={{fontSize:"14px"}}> Category </NavLink></Link>
                       </NavItem> 

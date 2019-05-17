@@ -42,7 +42,7 @@ class App extends Component {
   render() {
     return (
       <div style={{position:"relative", minHeight:"100vh"}}>
-        <div style={{paddingBottom:"200px"}}>
+        <div>
             <Navbar/>
             <ScrollToTop>
                 <Switch>

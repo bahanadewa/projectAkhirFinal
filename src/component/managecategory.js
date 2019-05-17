@@ -114,7 +114,7 @@ class Category extends React.Component{
 
     render(){
         return(
-            <div>
+            <div className="container">
                 <h3 className = 'container' style={{marginLeft : '40%'}}>MANAGE CATEGORY</h3>
                 <div className = 'container'>
                 

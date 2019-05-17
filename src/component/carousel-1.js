@@ -22,7 +22,38 @@ const items = [
     src: 'https://images.unsplash.com/photo-1533007414914-8f8f2510939e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1534&q=80',
     altText: '',
     caption: ''
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1525605455781-f77c8e30c811?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80',
+    altText: '',
+    caption: ''
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1482930172332-2293d7138235?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80',
+    altText: '',
+    caption: ''
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1520201163981-8cc95007dd2a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1534&q=80',
+    altText: '',
+    caption: ''
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1432139509613-5c4255815697?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1532&q=80',
+    altText: '',
+    caption: ''
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1505253758473-96b7015fcd40?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1545&q=80',
+    altText: '',
+    caption: ''
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1549365564-f34bcc1fbcce?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1534&q=80',
+    altText: '',
+    caption: ''
   }
+
 ];
 
 class MyCarousel extends Component {
