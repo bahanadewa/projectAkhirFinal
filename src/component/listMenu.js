@@ -70,6 +70,19 @@ class Product extends React.Component {
         newLink+='?' + 'ourmenu'+'='+this.refs.searchbyname.value
         this.props.history.push(newLink)
     }
+
+    lastseen=(val)=>{
+        var data = { username : this.props.username, 
+                    product_name : val.product_name,
+                    product_img : val.product_img}
+        Axios.post(urlAPI+"/lastseen",data)
+        .then((res)=>{
+            console.log(res)
+        })
+        .catch((err)=>{
+            console.log(err)
+        })
+    }
     
     renderProductJsx = ()=>{
         var arrSearchandFilter = this.state.listProduct.filter((val)=>{
@@ -78,7 +91,7 @@ class Product extends React.Component {
         var jsx = arrSearchandFilter.map((val)=>{
             return(
                 <div className="card col-md-3 mr-3 mt-3 imglist" style={{width: '18rem'}}>
-                    <Link to={'/detail-menu/'+val.id}>
+                    <Link to={'/detail-menu/'+val.id} onClick={()=>this.lastseen(val)}>
                         <img height="250px" width="100%" src={urlAPI+"/"+val.product_img} className="card-img-top mt-2" alt="..." />
                     </Link>
 

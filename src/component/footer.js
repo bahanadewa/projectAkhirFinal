@@ -4,7 +4,7 @@ import '../support/css/cssfooter.css'
 class Footer extends React.Component {
     render(){
         return(
-        <div class="card-footer text-muted text-center" style={{height:"80px"}}>
+        <div class="card-footer text-center" style={{height:"80px"}}>
             <div className="row">
                 <div className="col-md-3"></div>
 

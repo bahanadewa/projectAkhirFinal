@@ -46,13 +46,25 @@ class Product extends React.Component {
         }
     }
 
+    lastseen=(val)=>{
+        var data = { username : this.props.username, 
+                    product_name : val.product_name,
+                    product_img : val.product_img}
+        Axios.post(urlAPI+"/lastseen",data)
+        .then((res)=>{
+            console.log(res)
+        })
+        .catch((err)=>{
+            console.log(err)
+        })
+    }
+
    
-     
     renderProductJsx = ()=>{
         var jsx = this.state.cart.map((val)=>{
             return(
                 <div className="card col-md-3 mr-3 mt-3 imglist" style={{width: '18rem'}}>
-                    <Link to={'/detail-menu/'+val.id}>
+                    <Link to={'/detail-menu/'+val.id} onClick={()=>this.lastseen(val)}>
                         <img height="200px" width="200px" src={urlAPI+"/"+val.product_img} className="card-img-top mt-2" alt="..." />
                     </Link>
 

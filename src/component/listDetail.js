@@ -25,13 +25,13 @@ class ProductDetail extends React.Component{
     }
 
     onChange =()=>{
-        if (this.refs.quantity.value <0  ){
+        if (this.refs.quantity.value <1 ){
             swal({
                 title: "Try again",
                 text: "Minimum order quantity must be 0",
                 icon: "warning",
               });
-           this.refs.quantity.value = 0
+           this.refs.quantity.value = 1
         } 
     }
 
@@ -108,7 +108,7 @@ class ProductDetail extends React.Component{
                                                 <div style={{marginTop:'10px',
                                                     color:'#606060',
                                                     fontWeight:'700'}}> Quantity </div>
-                                                <input type="number" min={0} className="form-control" style={{width:"60px",marginTop:'13px'}} onChange={this.onChange} ref="quantity" />
+                                                <input type="number" defaultValue="1" min={1} className="form-control" style={{width:"60px",marginTop:'13px'}} onChange={this.onChange} ref="quantity" />
                                         </div>
                                         <div className="col-md-6">
                                                 <div style={{marginTop:'10px',

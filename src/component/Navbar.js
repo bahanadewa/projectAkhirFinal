@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import '../support/css/CSS.css'
-import { Link } from 'react-router-dom';
+import { Link,Redirect } from 'react-router-dom';
 import {connect} from 'react-redux'
 import cookie from 'universal-cookie'
 import {resetuser,resetCount} from '../1 action'
@@ -38,15 +38,15 @@ class MyNavbar extends Component {
   LogOut = ()=>{
     objCookie.remove('memory-cookie')
     this.props.resetuser()
-
 }
+  
 
   render() {
     if (this.props.username ===""){
       return (
         <div>
           <Navbar light expand="md">
-            <NavbarBrand  className="font1"> 
+            <NavbarBrand  className="font3"> 
                    <Link to="/"> <img src ="https://image.flaticon.com/icons/png/512/129/129356.png" width="30px" height="30px" /> </Link>  F O O D Q O M A
             </NavbarBrand>
   
@@ -90,7 +90,7 @@ class MyNavbar extends Component {
       return (
         <div>
           <Navbar light expand="md">
-            <NavbarBrand className="font1" > <Link to="/"> <img src ="https://image.flaticon.com/icons/png/512/129/129356.png" width="30px" height="30px" /> </Link>  F o o d Q o m a</NavbarBrand>
+            <NavbarBrand className="font3" > <Link to="/"> <img src ="https://image.flaticon.com/icons/png/512/129/129356.png" width="30px" height="30px" /> </Link>  F o o d Q o m a</NavbarBrand>
   
             <NavbarToggler onClick={this.toggle} />
             <Collapse isOpen={this.state.isOpen} navbar>
@@ -105,6 +105,7 @@ class MyNavbar extends Component {
                       <NavItem className="hover" style={{marginRight:"15px", marginLeft:"20px"}}>
                               <Link to="/category"><NavLink  style={{fontSize:"14px"}}> Category </NavLink></Link>
                       </NavItem> 
+                   
               </Nav>
   
               <Nav className="ml-auto" navbar>
@@ -150,17 +151,13 @@ class MyNavbar extends Component {
                                                         History
                                                     </DropdownItem>
                                                     </Link>
-                                                    
-                                                    <DropdownItem style={{color:"#7F7F7F"}}>
-                                                        Edit Profile
-                                                    </DropdownItem>
-
-                                                    
-                                                     
+     
                                                 <DropdownItem divider />
-                                                    <DropdownItem onClick={this.LogOut} style={{color:"#7F7F7F"}}>
-                                                        Log Out
-                                                    </DropdownItem>
+                                                    <Link to ="/">
+                                                        <DropdownItem onClick={this.LogOut} style={{color:"#7F7F7F"}}>
+                                                              Log Out
+                                                        </DropdownItem>
+                                                    </Link>
                                                 </DropdownMenu>
                         </UncontrolledDropdown>
               </Nav>

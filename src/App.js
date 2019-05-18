@@ -25,6 +25,7 @@ import ManageTransaction from './component/ManageTrasaction'
 import Category from './component/Category'
 
 
+
 const objCookie = new cookie () // objCookie dinamain terserah si penulis
 
 class App extends Component {
@@ -41,8 +42,8 @@ class App extends Component {
 
   render() {
     return (
-      <div style={{position:"relative", minHeight:"100vh"}}>
-        <div>
+      <div>
+        <div style={{marginBottom:"100px"}}>
             <Navbar/>
             <ScrollToTop>
                 <Switch>
@@ -64,7 +65,10 @@ class App extends Component {
                 </Switch>
             </ScrollToTop>
         </div>
-         <Footer/>
+          {/* <div className="fixed-bottom" >
+            <Footer/>
+          </div> */}
+         
       </div>
     );
   }
