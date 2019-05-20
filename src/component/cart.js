@@ -16,13 +16,13 @@ import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import Axios from 'axios';
 import { urlAPI } from '../support/url-API';
-import {Button,Icon,Input,Label} from 'semantic-ui-react';
 import swal from "sweetalert";
 import {Link} from 'react-router-dom'
 import {connect} from 'react-redux'
 import PageNotFound from './404'
 import cookie from 'universal-cookie'
 import {cartCount,resetCount} from '../1 action'
+import '../support/css/CSS.css'
 
 
 
@@ -236,9 +236,8 @@ class CustomPaginationActionsTable extends React.Component {
           </div>
       )
     }
-    if(this.props.user_name !== ""){
 
-    
+    if(this.props.user_name !== ""){
     return (
         <div className='container'>
             <Paper className={classes.root}>
@@ -255,9 +254,9 @@ class CustomPaginationActionsTable extends React.Component {
                             <TableCell style={{fontSize:'24px', fontWeight:'600'}}>ACT</TableCell>
                         </TableRow>
                     </TableHead>
-                    <TableBody>
+                    <TableBody >
                     {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row,index) => (
-                        <TableRow key={row.id}>
+                        <TableRow className="carthover" key={row.id}>
                         <TableCell>{index+1}</TableCell>
                         <TableCell>
                             {row.product_name}
@@ -282,7 +281,6 @@ class CustomPaginationActionsTable extends React.Component {
                           {/* <input type='button' value='edit' onClick={() => this.setState({edit : index})} className='btn btn-primary mr-2'/> 
                           <input type='button' value='delete' onClick={()=>this.onBtnDelete(row.id)} className='btn btn-danger mr-2'/> */}
                         </TableCell>}
-
                         </TableRow>
                     ))}
                     {emptyRows > 0 && (

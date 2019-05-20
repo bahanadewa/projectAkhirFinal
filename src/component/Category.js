@@ -63,13 +63,15 @@ class Product extends React.Component {
     renderProductJsx = ()=>{
         var jsx = this.state.cart.map((val)=>{
             return(
-                <div className="card col-md-3 mr-3 mt-3 imglist" style={{width: '18rem'}}>
+                <div className="col-md-3 mt-5 aaa">
                     <Link to={'/detail-menu/'+val.id} onClick={()=>this.lastseen(val)}>
-                        <img height="200px" width="200px" src={urlAPI+"/"+val.product_img} className="card-img-top mt-2" alt="..." />
+                        <center>
+                            <img style={{width:"200px", height:"200px"}} src={urlAPI+"/"+val.product_img} className="card-img-top mt-2" alt="..." />
+                        </center>
                     </Link>
 
                     <div className="card-body">
-                        <h2 className="card-text" style={{fontSize:"15px",fontWeight:"bold"}}>{val.product_name}</h2>
+                        <h2 className="card-text" style={{fontSize:"14px",fontWeight:"bold"}}>{val.product_name}</h2>
                         {/* <h5 className="card-text " style={{fontSize:"13px"}}> Nutrition Information </h5> */}
 
                         { val.product_discount > 0 ?

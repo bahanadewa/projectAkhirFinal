@@ -90,13 +90,15 @@ class Product extends React.Component {
         })
         var jsx = arrSearchandFilter.map((val)=>{
             return(
-                <div className="card col-md-3 mr-3 mt-3 imglist" style={{width: '18rem'}}>
+                <div className="col-md-3 mt-5 aaa" >
                     <Link to={'/detail-menu/'+val.id} onClick={()=>this.lastseen(val)}>
-                        <img height="250px" width="100%" src={urlAPI+"/"+val.product_img} className="card-img-top mt-2" alt="..." />
+                    <center>
+                        <img style={{width:"240px",height:"240px"}} src={urlAPI+"/"+val.product_img} className="card-img-top" alt="..." />
+                    </center>
                     </Link>
 
                     <div className="card-body">
-                        <h2 className="card-text" style={{fontSize:"15px",fontWeight:"bold"}}>{val.product_name}</h2>
+                        <h2 className="card-text" style={{fontSize:"14px",fontWeight:"bold"}}>{val.product_name}</h2>
                         {/* <h5 className="card-text " style={{fontSize:"13px"}}> Nutrition Information </h5> */}
 
                         { val.product_discount > 0 ?
@@ -108,9 +110,10 @@ class Product extends React.Component {
 
 
                         { this.props.username ===""?
-                               <button className="d-block btn btn-info mt-2" disabled style={{height:"34px", width:"100%"}}> <i class="fas fa-cart-arrow-down"></i> add to cart </button>
-                        :
-                            <button className="d-block btn btn-info mt-2" onClick={()=> this.addproduct(val)}  style={{height:"34px", width:"100%"}}> <i class="fas fa-cart-arrow-down"></i> add to cart </button>
+                               <button className="d-block btn btn-info mt-2" disabled style={{height:"34px", width:"100%"}}> <i class="fas fa-cart-arrow-down"></i> Add to cart </button>
+                        :<center>
+                            <button className="d-block btn mt-2 listmenuhover" onClick={()=> this.addproduct(val)}  style={{width:"70%", backgroundColor:"#e0c5de", color:"#3f3f3f"}}> <i class="fas fa-cart-arrow-down"></i> Add to cart </button>
+                        </center>
                         }
 
                         

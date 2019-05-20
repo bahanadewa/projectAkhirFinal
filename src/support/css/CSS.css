@@ -33,7 +33,6 @@
 }
 
 .knockout {
-
 vertical-align: middle;
 font-size:50pt;
 color: blue;
@@ -65,7 +64,7 @@ background-size: 400%;
 
 .img{
  background-image: url("../img/cupcake-icing-wallpaper.jpg");
- height: 750px;
+ height: 790px;
  background-position: center;
  background-size: cover;
 }
@@ -86,4 +85,14 @@ background-size: 400%;
 
 .imglist{
     background-image: url("../img/photo-1470790376778-a9fbc86d70e2.jpeg")
+}
+
+.aaa:hover{
+    box-shadow: 2px 1px 13px 1px rgba(210,210,210,0.75);
+    -webkit-box-shadow: 2px 1px 13px 1px rgba(210,210,210,0.75);
+    -moz-box-shadow: 2px 1px 13px 1px rgba(210,210,210,0.75);
+}
+
+.carthover:hover{
+    background-color: slategray;
 }
