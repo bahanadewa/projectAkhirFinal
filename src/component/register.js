@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link,Redirect} from 'react-router-dom'
+import { Link,Redirect,withRouter} from 'react-router-dom'
 import {connect} from 'react-redux'
 import Loader from 'react-loader-spinner'
 import {register_signup} from '../1 action'
@@ -27,7 +27,7 @@ renderLoading =()=>{
         width="50"
         />
     }else {
-        return  <button type="button" onClick={this.SignUp}   className="btn btn-primary" style={{width:"300px"}}  ><i className="fas fa-sign-in-alt" /> Sign Up!</button>
+        return  <button type="button" onClick={this.SignUp}  style={{width:"300px",height:"34px",borderRadius:"20px",backgroundColor:"#a2af75"}} ><i className="fas fa-sign-in-alt" /> Sign Up!</button>
     }
 }
 
@@ -44,10 +44,16 @@ SignUp =()=>{
     var password = this.refs.password.value
     var email = this.refs.email.value
     var phone = this.refs.phone.value
+   
     if (username ==="" || password ==="" || email === "" ||phone===""){
         this.setState({error : 'harus di isi semua'})
     } else {
-        this.props.register_signup(username,password,email,phone)
+        if(email.includes("@") && email.includes(".com")){
+            this.props.register_signup(username,password,email,phone)
+            this.props.history.push('/login')
+        }else{
+            alert('email tidak sesuai')
+        }
     }
 }
 
@@ -59,7 +65,7 @@ SignUp =()=>{
         }
         return(
             <div className="img" >
-                <div className="container myBody" style={{minHeight:"600px"}}>
+                <div className="container myBody" >
                 <div className="row justify-content-center ml-auto mr-auto">
                 
                 <form className="border mb-3 justify-content-center background" style={{padding:"20px", borderRadius:"5%",marginTop:"20%"}} ref="formLogin">
@@ -67,28 +73,28 @@ SignUp =()=>{
                         <div className="form-group row">
                             <label className="col-sm-3 col-form-label">Username</label>
                             <div className="col-sm-9">
-                            <input type="text" ref="username" className="form-control" id="inputUsername" placeholder="Username" required autoFocus/>
+                            <input type="text" ref="username" className="form-control" id="inputUsername" placeholder="Username" required autoFocus style={{borderRadius:"20px"}}/>
                             </div>
                         </div>
 
                         <div className="form-group row">
                             <label className="col-sm-3 col-form-label">Password</label>
                             <div className="col-sm-9">
-                            <input type="password" ref="password" className="form-control" id="inputPassword" placeholder="Password" required />
+                            <input type="password" ref="password" className="form-control" id="inputPassword" placeholder="Password" required style={{borderRadius:"20px"}}/>
                             </div>
                         </div>
 
                         <div className="form-group row">
                             <label className="col-sm-3 col-form-label">Email</label>
                             <div className="col-sm-9">
-                            <input type="email" ref="email" className="form-control" id="inputEmail" placeholder="Email@mail.com" required />
+                            <input type="email" ref="email" className="form-control" id="inputEmail" placeholder="Email@mail.com" required style={{borderRadius:"20px"}}/>
                             </div>
                         </div>
 
                         <div className="form-group row">
                             <label className="col-sm-3 col-form-label">Phone</label>
                             <div className="col-sm-9">
-                            <input type="phone" ref="phone" className="form-control" id="inputPhone" placeholder="Ex: +6x xxxxxxxxx" required />
+                            <input type="phone" ref="phone" className="form-control" id="inputPhone" placeholder="Ex: +6x xxxxxxxxx" required style={{borderRadius:"20px"}}/>
                             </div>
                         </div>
                         
@@ -121,4 +127,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps,{register_signup}) (Register)
+export default withRouter(connect(mapStateToProps,{register_signup}) (Register))

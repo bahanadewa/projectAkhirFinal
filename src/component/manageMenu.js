@@ -332,14 +332,14 @@ class CustomPaginationActionsTable extends React.Component {
                 <TableCell align="">{val.product_description}</TableCell>
                 
                 <TableCell>
-                        <Button onClick={()=>this.btnEDIT(val)} animated color="teal">
+                        <Button onClick={()=>this.btnEDIT(val)} style={{borderRadius:"20px"}} animated color="teal">
                             {/* <Button.Content visible></Button.Content> */}
                             <Button.Content visible>
                                 <Icon name='edit' />
                             </Button.Content>
                         </Button>
 
-                        <Button animated color="red" onClick={()=>this.onBtnDelete(val.id)}>
+                        <Button animated color="red" onClick={()=>this.onBtnDelete(val.id)} style={{borderRadius:"20px"}}>
                             {/* <Button.Content visible></Button.Content> */}
                             <Button.Content visible>
                                 <Icon name='delete' />

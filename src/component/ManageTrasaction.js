@@ -172,8 +172,8 @@ class CustomPaginationActionsTable extends React.Component {
           <TableCell>{row.date}</TableCell>
           <TableCell>{formatMoney  (row.total)}</TableCell>
           <TableCell>
-               <input type='button' className='btn btn-info' value='verify' onClick={()=>this.verify(row.id)} /> 
-               <input type='button' className='btn btn-danger' value='decline' onClick={()=>this.decline(row.id)} /> 
+               <input type='button' style={{borderRadius:"20px"}} className='btn btn-info' value='verify' onClick={()=>this.verify(row.id)} /> 
+               <input type='button' style={{borderRadius:"20px"}} className='btn btn-danger' value='decline' onClick={()=>this.decline(row.id)} /> 
           </TableCell>
         </TableRow>
       )
@@ -241,7 +241,7 @@ class CustomPaginationActionsTable extends React.Component {
                         <TableCell>{row.date} </TableCell>
                         <TableCell>{row.status} </TableCell>
   
-                        <TableCell><input type='button' value='Detail' onClick={()=>this.TrasactionDetail(row.id)} className='btn btn-danger mr-2'/></TableCell>
+                        <TableCell><input type='button' value='Detail' onClick={()=>this.TrasactionDetail(row.id)} className='btn btn-danger mr-2' style={{borderRadius:"20px"}}/></TableCell>
                         
 
                         </TableRow>
@@ -289,7 +289,7 @@ class CustomPaginationActionsTable extends React.Component {
                 </TableBody>
                 <TableFooter>
                         <TableRow>
-                          <TableCell> <input type='button' className='btn btn-primary' value='close' onClick={()=> this.setState({isDetail:false, historyDetail:[]})} /> </TableCell>
+                          <TableCell> <input type='button' className='btn btn-primary' value='close' style={{borderRadius:"20px"}} onClick={()=> this.setState({isDetail:false, historyDetail:[]})} /> </TableCell>
                         </TableRow>
                         
                 </TableFooter>      

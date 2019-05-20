@@ -43,7 +43,7 @@ class App extends Component {
   render() {
     return (
       <div>
-        <div style={{marginBottom:"100px"}}>
+        <div>
             <Navbar/>
             <ScrollToTop>
                 <Switch>
@@ -67,8 +67,7 @@ class App extends Component {
         </div>
           {/* <div className="fixed-bottom" >
             <Footer/>
-          </div> */}
-         
+          </div> */}    
       </div>
     );
   }

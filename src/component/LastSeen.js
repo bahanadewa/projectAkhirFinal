@@ -2,6 +2,7 @@ import React from 'react'
 import { urlAPI } from '../support/url-API';
 import Axios from 'axios'
 import cookie from 'universal-cookie'
+import Slider from "react-slick";
 import '../support/css/CSS.css'
 
 const objCookie = new cookie ()
@@ -27,12 +28,10 @@ class Product extends React.Component {
     }
 
 
-
-    
     renderProductJsx =()=>{
         var jsx = this.state.data.map((val)=>{
             return(
-                    <div className="card" style={{width:'200px', margin:"10px"}}>
+                    <div style={{width:'200px', margin:"10px"}}>
                         <img src={urlAPI+"/"+val.product_img} height="200px" width="200px"className="card-img-top" alt="..." />
                         <div className="card-body">
                             <p className="card-text">{val.product_name}</p>
@@ -46,13 +45,28 @@ class Product extends React.Component {
    
 
     render (){
+
+        const settings = {
+            dots: true,
+            infinite: false,
+            speed: 1000,
+            slidesToShow: 3,
+            slidesToScroll: 3,
+            className :"slides",
+            arrows : true
+          };
+
         return (
             <div className="container">
                 <div className="font3" style={{textAlign:"center", fontSize:"38px"}}>
                     Last View
                 </div>
-                <div className="row justify-content-center">
-                    {this.renderProductJsx()}
+
+                <div >
+                <hr style={{border:"solid 2px gray", borderRadius:"20px"}}></hr>
+                    <Slider {...settings}>
+                        {this.renderProductJsx()}
+                    </Slider>
                 </div>
                    
             </div>

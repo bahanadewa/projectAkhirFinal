@@ -112,7 +112,7 @@ class Product extends React.Component {
                         { this.props.username ===""?
                                <button className="d-block btn btn-info mt-2" disabled style={{height:"34px", width:"100%"}}> <i class="fas fa-cart-arrow-down"></i> Add to cart </button>
                         :<center>
-                            <button className="d-block btn mt-2 listmenuhover" onClick={()=> this.addproduct(val)}  style={{width:"70%", backgroundColor:"#e0c5de", color:"#3f3f3f"}}> <i class="fas fa-cart-arrow-down"></i> Add to cart </button>
+                            <button className="d-block btn mt-2 listmenuhover" onClick={()=> this.addproduct(val)}  style={{width:"70%", backgroundColor:"#e0c5de", color:"#3f3f3f",borderRadius:"20px"}}> <i class="fas fa-cart-arrow-down"></i> Add to cart </button>
                         </center>
                         }
 

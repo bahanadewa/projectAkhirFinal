@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import '../support/css/CSS.css'
-import { Link,Redirect } from 'react-router-dom';
+import { Link,Redirect,withRouter } from 'react-router-dom';
 import {connect} from 'react-redux'
 import cookie from 'universal-cookie'
 import {resetuser,resetCount} from '../1 action'
@@ -38,6 +38,7 @@ class MyNavbar extends Component {
   LogOut = ()=>{
     objCookie.remove('memory-cookie')
     this.props.resetuser()
+    this.props.history.push('/')
 }
   
 
@@ -153,11 +154,9 @@ class MyNavbar extends Component {
                                                     </Link>
      
                                                 <DropdownItem divider />
-                                                    <Link to ="/">
                                                         <DropdownItem onClick={this.LogOut} style={{color:"#7F7F7F"}}>
                                                               Log Out
                                                         </DropdownItem>
-                                                    </Link>
                                                 </DropdownMenu>
                         </UncontrolledDropdown>
               </Nav>
@@ -179,4 +178,4 @@ const mapStateToProps =(state)=>{
   }
 }
 
-export default connect (mapStateToProps,{resetuser,resetCount})(MyNavbar);
+export default withRouter( connect (mapStateToProps,{resetuser,resetCount})(MyNavbar));

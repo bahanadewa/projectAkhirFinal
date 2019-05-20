@@ -96,3 +96,26 @@ background-size: 400%;
 .carthover:hover{
     background-color: slategray;
 }
+
+
+
+.slick-list{
+    margin: 0 10px;
+}
+.slick-slide>div{
+    padding: 0 10px;
+}
+.slides{
+    position: relative;
+}
+.slides .slick-prev,
+.slides .slick-next{
+    position:  absolute;
+    top: 50px;
+    z-index: 1;
+}
+
+.slides .slick-prev::before,
+.slides .slick-next::before{
+    color: black
+}
