@@ -11,7 +11,7 @@ export const login =(paramsUserName,paramsPassword)=>{
             type: "LOADING", 
         })
 
-        axios.get(urlAPI+'/getuserlogin?username='+paramsUserName+'&password='+paramsPassword)
+        axios.get(urlAPI+'/authLogin/getuserlogin?username='+paramsUserName+'&password='+paramsPassword)
         //ketika berhasil terhubung kem daabase makan lanjut ke then
         .then((res) => {
             console.log(res)
@@ -58,7 +58,7 @@ export const cookieChecked = () => {
 
 export const keepLogIn = (cookie)=>{
     return(dispatch) => {
-        axios.get(urlAPI + '/getalluserbyusername/'+cookie)
+        axios.get(urlAPI + '/auth/getalluserbyusername/'+cookie)
         .then((res) => {
             if(res.data.length > 0){
                 dispatch({
@@ -86,7 +86,7 @@ export const register_signup = (a,b,c,d) =>{
         var newData = {username : a, password : b, email : c, phone : d}
         // Mengecek Username availablity
 
-        axios.get(urlAPI +'/getalluserbyusername/'+ a)
+        axios.get(urlAPI +'/auth/getalluserbyusername/'+ a)
         .then((res) => {
             if(res.data.length > 0){
                 dispatch({
@@ -94,7 +94,7 @@ export const register_signup = (a,b,c,d) =>{
                 })
             }
             else{
-                axios.post(urlAPI +'/addnewuser',newData)
+                axios.post(urlAPI +'/auth/register',newData)
                 .then((res) => {
                         dispatch({
                             type : 'LOGIN_SUCCESS-1',
@@ -118,36 +118,36 @@ export const register_signup = (a,b,c,d) =>{
     }
 }
 
-export const loginWithGoogle= (email)=>{
-    return (dispatch)=>{
-        axios.get(urlAPI+'/user??username='+email)
-        .then((res)=> {
-            if (res.data.length >0){
-                dispatch({
-                    type :'LOGIN_SUCCESS',
-                    payload : res.data[0]
-                },
-                    objCookie.set('memory-cookie',email,{path :'/'})
-                )
-            }else {
-                axios.post(urlAPI+'/db_user',{username : email, role : "user"})
-                .then((res)=>{
-                    dispatch({
-                        type : 'LOGIN_SUCCESS',
-                        payload : res.data
-                    })
-                },
-                    objCookie.set('memory-cookie',email,{path :'/'})
-                )
-                .catch((err)=>{
-                    console.log(err)
-                })
-            }
-        })
-        .catch((err)=> { 
-            dispatch ({
-            type : 'SISTEM_ERROR'
-        })
-        })
-    }
-}
+// export const loginWithGoogle= (email)=>{
+//     return (dispatch)=>{
+//         axios.get(urlAPI+'/user??username='+email)
+//         .then((res)=> {
+//             if (res.data.length >0){
+//                 dispatch({
+//                     type :'LOGIN_SUCCESS',
+//                     payload : res.data[0]
+//                 },
+//                     objCookie.set('memory-cookie',email,{path :'/'})
+//                 )
+//             }else {
+//                 axios.post(urlAPI+'/db_user',{username : email, role : "user"})
+//                 .then((res)=>{
+//                     dispatch({
+//                         type : 'LOGIN_SUCCESS',
+//                         payload : res.data
+//                     })
+//                 },
+//                     objCookie.set('memory-cookie',email,{path :'/'})
+//                 )
+//                 .catch((err)=>{
+//                     console.log(err)
+//                 })
+//             }
+//         })
+//         .catch((err)=> { 
+//             dispatch ({
+//             type : 'SISTEM_ERROR'
+//         })
+//         })
+//     }
+// }

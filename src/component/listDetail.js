@@ -15,7 +15,7 @@ class ProductDetail extends React.Component{
     getDataApi = ()=>{
         var id = this.props.match.params.id
     
-        Axios.get(urlAPI+'/getallproduct/'+id)
+        Axios.get(urlAPI+'/authProduct/getallproduct/'+id)
         .then((res)=>{
             this.setState({productname : res.data[0]})
         })
@@ -44,11 +44,11 @@ class ProductDetail extends React.Component{
         
         var newdata ={product_quantity,product_username,product_id}
 
-        Axios.get(urlAPI+'/allcart?product_username='+this.props.user+"&product_id="+newdata.product_id)
+        Axios.get(urlAPI+'/authCart/getallcartbyproductandusername?product_username='+this.props.user+"&product_id="+newdata.product_id)
         .then((res)=>{
             if (res.data.length>0){
                 product_quantity = res.data[0].product_quantity+product_quantity
-                Axios.put(urlAPI+'/cart/'+res.data[0].id,{...newdata,product_quantity })
+                Axios.put(urlAPI+'/authCart/cart/'+res.data[0].id,{...newdata,product_quantity })
                 swal({
 
                     title: "Add to cart success",
@@ -56,7 +56,7 @@ class ProductDetail extends React.Component{
                     icon: "success",
                   });
             }else{
-                Axios.post(urlAPI+'/addcart',newdata)
+                Axios.post(urlAPI+'/authCart/addcart',newdata)
                 swal({
 
                     title: "Add to cart success",

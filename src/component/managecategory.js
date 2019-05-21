@@ -10,15 +10,16 @@ class Category extends React.Component{
     }
 
     getCategory = () => {
-        Axios.get(urlAPI+'/getallcategory')
+        Axios.get(urlAPI+'/authCategory/getallcategory')
         .then((res)=>{
             this.setState({getdatacategory : res.data, searchData:''})
         })
     }
+
     saveCategory = () => {
         var product_category = this.refs.category.value
         var newData = {product_category}
-        Axios.post(urlAPI + '/addCategory', newData)
+        Axios.post(urlAPI + '/authCategory/addCategory', newData)
         .then((res)=>{
             if(typeof(res.data)==="string"){
                 swal('Category Have Been Taken','Try Again','error')
@@ -32,7 +33,7 @@ class Category extends React.Component{
     }
     
     deleteCategory=(id)=>{
-        Axios.delete(urlAPI+'/deleteCategory/'+id)
+        Axios.delete(urlAPI+'/authCategory/deleteCategory/'+id)
         .then((res)=>{
             swal('Delete Success','Success','success')
           // this.getItem()
@@ -50,13 +51,13 @@ class Category extends React.Component{
         }else{
             product_category = this.refs.categoryEdit.value
             var newData = {product_category}
-            Axios.put(urlAPI+'/updateCategory/'+id,newData)
+            Axios.put(urlAPI+'/authCategory/updateCategory/'+id,newData)
             .then((res)=>{
                 if(typeof(res.data)==="string"){
                     alert(res.data)
                 }else{
                     swal('Update Category Success','Success','success')
-                    this.setState({getdatacategory: res.data,addpopup:false})
+                    this.setState({getdatacategory: res.data, aditpopup:false})
                 }
             
                 })

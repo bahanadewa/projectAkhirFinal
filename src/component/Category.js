@@ -19,7 +19,7 @@ class Product extends React.Component {
     }
 
     getDataCategory =()=> {
-        Axios.get(urlAPI+"/getallcategory")
+        Axios.get(urlAPI+"/authCategory/getallcategory")
         .then((res) => this.setState({listCategory :res.data}))
         .catch ((err)=> console.log(err))
     }
@@ -38,7 +38,7 @@ class Product extends React.Component {
             this.setState({cart : null})
         }else{
             var id = this.refs.category.value
-            Axios.get(urlAPI+"/getsearch/"+id)
+            Axios.get(urlAPI+"/authCategory/getsearch/"+id)
             .then((res) =>{
                 this.setState({cart : res.data})
             })
@@ -50,7 +50,7 @@ class Product extends React.Component {
         var data = { username : this.props.username, 
                     product_name : val.product_name,
                     product_img : val.product_img}
-        Axios.post(urlAPI+"/lastseen",data)
+        Axios.post(urlAPI+"/authSeen/lastseen",data)
         .then((res)=>{
             console.log(res)
         })

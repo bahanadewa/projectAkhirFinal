@@ -9,7 +9,7 @@ componentDidMount() {
 this.getDataCategory()
 }
 getDataCategory = () => {
-    Axios.get(urlAPI+'/getAllCategory')
+    Axios.get(urlAPI+'/authCategory/getAllCategory')
     .then((res)=>{
         this.setState({iscategory:res.data})
     })
@@ -50,7 +50,7 @@ addData = () => {
         var fd = new FormData()
         fd.append('image', this.state.selecctedFile, this.state.selecctedFile.name)    
         fd.append('data',JSON.stringify(data))
-        Axios.post(urlAPI+'/addProduct', fd)
+        Axios.post(urlAPI+'/authProduct/addProduct', fd)
         .then ((res)=> {
             if(res.data.error){
                 // this.setState({error : res.data.msg})

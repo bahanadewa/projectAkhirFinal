@@ -139,7 +139,7 @@ class CustomPaginationActionsTable extends React.Component {
   }
 
   getDataApi = () =>{
-        Axios.get(urlAPI+'/getallproduct')
+        Axios.get(urlAPI+'/authProduct/getallproduct')
         .then ((res)=> this.setState({rows : res.data }))
         .catch((err)=> console.log(err))
   }
@@ -154,7 +154,7 @@ class CustomPaginationActionsTable extends React.Component {
   }
 
   getDataCategory = ()=>{
-        Axios.get(urlAPI+'/getallcategory')
+        Axios.get(urlAPI+'/authCategory/getallcategory')
         .then((res)=>{
           this.setState({getdatacategory : res.data})
         })    
@@ -179,31 +179,6 @@ class CustomPaginationActionsTable extends React.Component {
   btnCANCEL = (param) =>{
     this.setState({isEdit:false , editItem:param})
   }
-
-  BtnSave = ()=>{
-    var name = this.name.inputRef.value ===""? this.state.editItem.name: this.nameEDIT.inputRef.value ;
-    var img = this.img.inputRef.value ===""? this.state.editItem.img: this.imgEDIT.inputRef.value ;
-    var serving = parseInt (this.serving.inputRef.value) ===""? this.state.editItem.serving: this.servingEDIT.inputRef.value ;
-    var calories = parseInt (this.calories.inputRef.value ) ===""? this.state.editItem.calories: this.caloriesEDIT.inputRef.value ;
-    var fat = parseInt (this.fat.inputRef.value ) ===""? this.state.editItem.fat: this.fatEDIT.inputRef.value ;
-    var protein = parseInt ( this.protein.inputRef.value) ===""? this.state.editItem.protein: this.proteinEDIT.inputRef.value ;
-    var carb =parseInt  (this.carb.inputRef.value ) ===""? this.state.editItem.carb: this.carbEDIT.inputRef.value ;
-    var fiber =parseInt  (this.fiber.inputRef.value ) ===""? this.state.editItem.fiber: this.fiberEDIT.inputRef.value ;
-    var category = this.category.inputRef.value ===""? this.state.editItem.category: this.categoryEDIT.inputRef.value ;
-    var price =parseInt  (this.price.inputRef.value ) ===""? this.state.editItem.prive: this.priceEDIT.inputRef.value ;
-    var discount =parseInt  (this.discount.inputRef.value ) ===""? this.state.editItem.discount: this.discountEDIT.inputRef.value ;
-
-    var newData={name , img, serving,calories,fat,protein,carb,fiber,category,price,discount}
-
-    Axios.put(urlAPI+'/product-menu/'+this.state.editItem.id, newData)
-    .then((res) =>{
-        this.getDataApi()
-        swal('edit status','edit product success','success')
-        this.setState({isEdit:false, editItem: {}})
-    })
-    .catch ((err) => {console.log(err)})
-  }
-  
 
   getdatasearch=()=>{
     var inputname = this.refs.searchbyname.value
@@ -269,12 +244,12 @@ class CustomPaginationActionsTable extends React.Component {
 
       fd.append('imageBefore', this.state.editItem.product_img)
 
-      Axios.put(urlAPI+'/editProduct/'+this.state.editItem.id, fd)
+      Axios.put(urlAPI+'/authProduct/editProduct/'+this.state.editItem.id, fd)
             .then((res)=>{
               this.setState({isEdit : false})
               this.getDataApi()
             })
-      Axios.put(urlAPI+'/updateCategoryProduct/'+this.state.editItem.id, {product_category})
+      Axios.put(urlAPI+'/authCategory/updateCategoryProduct/'+this.state.editItem.id, {product_category})
             .then((res)=>{
               this.setState({isEdit : false})
               this.getDataApi()
@@ -282,13 +257,13 @@ class CustomPaginationActionsTable extends React.Component {
       swal('UPDATE','SUCCESS','success')
 
     }else{
-      Axios.put(urlAPI+'/editProduct/'+this.state.editItem.id,data)
+      Axios.put(urlAPI+'/authProduct/editProduct/'+this.state.editItem.id,data)
             .then((res)=>{
               this.setState({isEdit : false})
               this.getDataApi()
               swal('UPDATE','SUCCESS','success')
             })  
-      Axios.put(urlAPI+'/updateCategoryProduct/'+this.state.editItem.id, {product_category})
+      Axios.put(urlAPI+'/authCategory/updateCategoryProduct/'+this.state.editItem.id, {product_category})
             .then((res)=>{
               this.setState({isEdit : false})
               this.getDataApi()

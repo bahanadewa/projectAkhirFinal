@@ -20,7 +20,7 @@ class Product extends React.Component {
     }
 
     getDataProduct =()=> {
-        Axios.get(urlAPI+"/getallproduct")
+        Axios.get(urlAPI+"/authProduct/getallproduct")
         .then((res) => this.setState({listProduct :res.data}))
         .catch ((err)=> console.log(err))
     }
@@ -43,12 +43,12 @@ class Product extends React.Component {
 
         var newdata ={product_quantity,product_username,product_id}
                         
-        Axios.get(urlAPI + '/allcart?product_id=' + newdata.product_id + '&product_username=' + this.props.username).then((res) => {
+        Axios.get(urlAPI + '/authCart/getallcartbyproductandusername?product_id=' + newdata.product_id + '&product_username=' + this.props.username).then((res) => {
             if(res.data.length > 0){
-                Axios.put(urlAPI + '/cart/' + res.data[0].id, {...newdata, product_quantity: parseInt(res.data[0].product_quantity) + newdata.product_quantity })
+                Axios.put(urlAPI + '/authCart/cart/' + res.data[0].id, {...newdata, product_quantity: parseInt(res.data[0].product_quantity) + newdata.product_quantity })
                 swal('Status Add' , 'Success Add to Cart' , 'success')
             }else{
-                Axios.post(urlAPI + '/addcart',newdata)
+                Axios.post(urlAPI + '/authCart/addcart',newdata)
                 .then((res) => {
                     swal('Status Add' , 'Success Add to Cart' , 'success')
                     this.props.cartCount(this.props.username)
@@ -75,7 +75,7 @@ class Product extends React.Component {
         var data = { username : this.props.username, 
                     product_name : val.product_name,
                     product_img : val.product_img}
-        Axios.post(urlAPI+"/lastseen",data)
+        Axios.post(urlAPI+"/authSeen/lastseen",data)
         .then((res)=>{
             console.log(res)
         })

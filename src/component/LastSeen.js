@@ -18,7 +18,7 @@ class Product extends React.Component {
 
     getdata=()=>{
         var getcookie = objCookie.get('memory-cookie')
-        Axios.get(urlAPI+'/showlastseen/'+getcookie)
+        Axios.get(urlAPI+'/authSeen/showlastseen/'+getcookie)
         .then((res)=>{
             this.setState({data : res.data})
         })
@@ -43,7 +43,6 @@ class Product extends React.Component {
     } 
 
    
-
     render (){
 
         const settings = {

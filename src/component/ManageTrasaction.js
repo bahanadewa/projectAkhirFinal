@@ -136,7 +136,7 @@ class CustomPaginationActionsTable extends React.Component {
   }
 
   getData = () => {
-    Axios.get(urlAPI + '/GetDataManageTransaction')
+    Axios.get(urlAPI + '/authVerify/GetDataManageTransaction')
     .then((res) => {
         this.setState({rows : res.data})
     })
@@ -153,7 +153,7 @@ class CustomPaginationActionsTable extends React.Component {
 
  
   TrasactionDetail=(id)=>{
-    Axios.get(urlAPI +'/GetDataManageTransaction/'+id)
+    Axios.get(urlAPI +'/authVerify/GetDataManageTransactionbyID/'+id)
     .then((res) => {
         this.setState({ManageTransaction: res.data, isDetail:true})
     })
@@ -182,7 +182,7 @@ class CustomPaginationActionsTable extends React.Component {
   }
 
   verify=(id)=>{
-    Axios.put(urlAPI+'/VerifyDataManageTransaction/'+id) 
+    Axios.put(urlAPI+'/authVerify/VerifyDataManageTransaction/'+id) 
     .then((res)=>{
         swal('VERIFIED','SUCCESS','success')
         this.getData()
@@ -195,7 +195,7 @@ class CustomPaginationActionsTable extends React.Component {
   }
 
   decline=(id)=>{
-    Axios.put(urlAPI+'/RejectDataManageTransaction?id='+id+'&username='+this.props.username) 
+    Axios.put(urlAPI+'/authVerify/RejectDataManageTransaction?id='+id+'&username='+this.props.username) 
     .then((res)=>{
         swal('DECLINE','SUCCESS','success')
         this.getData()

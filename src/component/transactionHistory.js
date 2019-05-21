@@ -136,7 +136,7 @@ class CustomPaginationActionsTable extends React.Component {
 
   getData = () => {
     var getcookie = objcookie.get('memory-cookie')
-    Axios.get(urlAPI + '/showhistory?username=' +getcookie)
+    Axios.get(urlAPI + '/authCheckout/showhistory?username=' +getcookie)
     .then((res) => {
         this.setState({rows : res.data})
     })
@@ -156,7 +156,7 @@ class CustomPaginationActionsTable extends React.Component {
   }
 
   historyDetail=(id)=>{
-    Axios.get(urlAPI +'/showhistorydetail/'+id)
+    Axios.get(urlAPI +'/authCheckout/showhistorydetail/'+id)
     .then((res) => {
         this.setState({historyDetail: res.data,isDetail:true})
     })

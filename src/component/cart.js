@@ -140,7 +140,7 @@ class CustomPaginationActionsTable extends React.Component {
 
   getDataApi = () =>{
         var getcookie = objcookie.get('memory-cookie')
-        Axios.get(urlAPI+'/getallcart/'+getcookie)
+        Axios.get(urlAPI+'/authCart/getallcart/'+getcookie)
         
         .then ((res)=> this.setState({rows : res.data}))
         .catch((err)=> console.log(err))
@@ -156,7 +156,7 @@ class CustomPaginationActionsTable extends React.Component {
 
   onBtnDelete = (id)=>{
         var getcookie = objcookie.get('memory-cookie')
-        Axios.delete(urlAPI+'/cartdelete/'+id)
+        Axios.delete(urlAPI+'/authCart/cartdelete/'+id)
         .then((res)=>{
           swal({
             title: "Deleted",
@@ -176,7 +176,7 @@ class CustomPaginationActionsTable extends React.Component {
 }
 
   onBtnSave =(obj) => {
-    Axios.put(urlAPI+'/cart/' + obj.id, {...obj , product_quantity : this.refs.qtyEdit.value})
+    Axios.put(urlAPI+'/authCart/updateCartByID/' + obj.id, {...obj , product_quantity : this.refs.qtyEdit.value})
     .then((res) => {
       swal({
         title: "",
@@ -210,7 +210,7 @@ class CustomPaginationActionsTable extends React.Component {
 
   onCheckout =() => {
     
-    Axios.post(urlAPI + '/history',{username : this.props.user , total : this.totalHarga()})
+    Axios.post(urlAPI + '/authCheckout/history',{username : this.props.user , total : this.totalHarga()})
     .then((res) => {
       swal('Check Your Email For Payment Confirmation' , 'Success','success')
       this.getDataApi()

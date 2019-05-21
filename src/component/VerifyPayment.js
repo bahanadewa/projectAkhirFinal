@@ -16,7 +16,7 @@ componentDidMount=()=>{
 }
 
 getdatahistory=()=>{
-    Axios.get(urlAPI+'/getdatahistory?username='+username)
+    Axios.get(urlAPI+'/authVerify/getdatahistory?username='+username)
     .then((res)=>{
         this.setState({history : res.data})
     })
@@ -36,7 +36,7 @@ addData = ()=>{
         if(this.state.selecctedFile && id >0){
             var fd = new FormData()
             fd.append('payment_verification', this.state.selecctedFile, this.state.selecctedFile.name)  
-            Axios.put(urlAPI+'/payment-verified?username='+username+"&id="+id, fd)
+            Axios.put(urlAPI+'/authVerify/payment-verified?username='+username+"&id="+id, fd)
 
                 .then ((res)=> {
                     if(res.data.error){

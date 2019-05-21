@@ -3,9 +3,9 @@ import {urlAPI } from "../support/url-API";
 
 export const cartCount = (int) => {
     return (dispatch) => {
-        Axios.get(urlAPI + '/user?username='+ int)
+        Axios.get(urlAPI + '/auth/user?username='+ int)
             .then((res)=>{
-                    Axios.get(urlAPI + '/cart?product_username='+ res.data[0].username)
+                    Axios.get(urlAPI + '/authCart/cart?product_username='+ res.data[0].username)
                         .then((res) => {
                                 dispatch({
                                     type : 'CART_COUNT',
