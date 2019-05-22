@@ -61,7 +61,7 @@ addData = ()=>{
 printDataList=()=>{
     var data = this.state.history.map((val)=>{
     return (
-    <option value={val.id}>{val.total} | {val.date} |  {val.status}</option>
+    <option value={val.id}>{val.invoice_number} | {val.date} |  {val.status}</option>
     )
     })
     return data

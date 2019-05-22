@@ -170,7 +170,7 @@ class CustomPaginationActionsTable extends React.Component {
         <TableRow key={index}>
           <TableCell>{index+1}</TableCell>
           <TableCell>
-            <img style={{width:"50px", height:"50px"}} src={urlAPI+"/"+row.product_img} className="card-img-top" alt="..." />
+              <img style={{width:"50px", height:"50px"}} src={urlAPI+"/"+row.product_img} className="card-img-top" alt="..." />  
           </TableCell>
           <TableCell>
               {row.product_name}
@@ -200,6 +200,7 @@ class CustomPaginationActionsTable extends React.Component {
                             <TableCell style={{fontSize:'24px', fontWeight:'600'}}>USERNAME</TableCell>
                             <TableCell style={{fontSize:'24px', fontWeight:'600'}}>TOTAL</TableCell>
                             <TableCell style={{fontSize:'24px', fontWeight:'600'}}>DATE</TableCell>
+                            <TableCell style={{fontSize:'24px', fontWeight:'600'}}> INVOICE </TableCell>
                             <TableCell style={{fontSize:'24px', fontWeight:'600'}}> STATUS</TableCell>
                             <TableCell style={{fontSize:'24px', fontWeight:'600'}}></TableCell>
                         </TableRow>
@@ -213,6 +214,7 @@ class CustomPaginationActionsTable extends React.Component {
                         </TableCell>
                         <TableCell>{formatMoney (row.total)}</TableCell>
                         <TableCell>{row.date} </TableCell>
+                        <TableCell>{row.invoice_number} </TableCell>
                         <TableCell>{row.status} </TableCell>
                         <TableCell><input type='button' value='Detail' onClick={()=>this.historyDetail(row.id)} className='btn btn-danger mr-2'/></TableCell>
 

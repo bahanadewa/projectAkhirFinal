@@ -5,6 +5,8 @@ import Loader from 'react-loader-spinner'
 import {register_signup} from '../1 action'
 import '../support/css/CSS.css'
 
+const validator = require('validator')
+
 
 
 
@@ -44,11 +46,11 @@ SignUp =()=>{
     var password = this.refs.password.value
     var email = this.refs.email.value
     var phone = this.refs.phone.value
-   
+
     if (username ==="" || password ==="" || email === "" ||phone===""){
         this.setState({error : 'harus di isi semua'})
     } else {
-        if(email.includes("@") && email.includes(".com")){
+        if(validator.isEmail(`${email}`)){
             this.props.register_signup(username,password,email,phone)
             this.props.history.push('/login')
         }else{
@@ -94,7 +96,7 @@ SignUp =()=>{
                         <div className="form-group row">
                             <label className="col-sm-3 col-form-label">Phone</label>
                             <div className="col-sm-9">
-                            <input type="phone" ref="phone" className="form-control" id="inputPhone" placeholder="Ex: +6x xxxxxxxxx" required style={{borderRadius:"20px"}}/>
+                            <input type="phone" ref="phone" maxLength={15} className="form-control" id="inputPhone" placeholder="Ex: +6x xxxxxxxxx" required style={{borderRadius:"20px"}}/>
                             </div>
                         </div>
                         

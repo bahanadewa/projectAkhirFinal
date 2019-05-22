@@ -12,9 +12,11 @@ module.exports={
         var yyyy = today.getFullYear();
         var month = ['January', 'February', 'March', 'April', 'Mei', 'June', 'July', 'August', 'September', 'October', 'November', 'Desember']
         var date = dd + ' ' + month[mm] + ' ' + yyyy + ' ' + today.getHours() + ':' + today.getMinutes()+ ':' +today.getSeconds()
+        var invoice_number = Date.now()
         var data = {
             ...req.body,
-            date
+            date,
+            invoice_number
         }
     
         var sql = `insert into history set ?`
@@ -50,7 +52,7 @@ module.exports={
                                     if (err5) throw err5
                                     var to = result5[0].email
     
-                                    var sql6=`select h.username as username, h.total, h.date, quantity, history_detail.total as historyD_total, p.product_name, p.product_price, p.product_discount from history_detail
+                                    var sql6=`select h.username as username, h.total, h.date, h.invoice_number, quantity, history_detail.total as historyD_total, p.product_name, p.product_price, p.product_discount from history_detail
                                     join product p on id_product = p.id
                                     join history h on id_history = h.id where id_history=${result2[0].id};`
     
@@ -61,12 +63,16 @@ module.exports={
                                         total += val.product_quantity*(val.product_price-(val.product_price*(val.product_discount/100)))    
                                         })
     
-                                    fs.readFile('../support/template/invoice.html', {encoding: 'utf-8'}, (err, hasilRead) => {
+                                    fs.readFile('../support/template/index.html', {encoding: 'utf-8'}, (err, hasilRead) => {
                                                 if(err) throw err
                                                 var template = handlebar.compile(hasilRead)
                                                 var totalsemua = result6[0].total
                                                 var username = result6[0].username
-                                                var data = {result6,totalsemua,username}
+                                                var numb_invoice = result6[0].invoice_number
+                                                var date = result6[0].date
+
+
+                                                var data = {result6,totalsemua,username,numb_invoice,date}
                                                 
                                                 var hasilHbars = template(data)
                                                 var options = {

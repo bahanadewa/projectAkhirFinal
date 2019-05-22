@@ -13,6 +13,7 @@
         zoom: 70%;
     }
     
+    
     </style>
 
 
@@ -22,27 +23,28 @@
   <body>
     <div class="container">
         <h1>Tagihan Untuk {{username}}</h1>
+        <h6>No Invoice {{numb_invoice}}</h6>
     <table class="table">
         <thead>
             <tr>
-                <td>Product name</td>
-                <td>quantity</td>
-                <td>price</td>
-                <td>discount</td>
-                <td>Total</td>
-                <td>Date</td>
+                    <td>Product name</td>
+                    <td>quantity</td>
+                    <td>price</td>
+                    <td>discount</td>
+                    <td>Total</td>
+                    <td>Date</td>
             </tr>
         </thead>
         <tbody>
             {{#each result6}}
-            <tr>
-                <td>{{product_name}}</td>
-                <td>{{quantity}}</td>
-                <td>{{product_price}}</td>
-                <td>{{product_discount}}</td>
-                <td>{{historyD_total}}</td>
-                <td>{{date}}</td>
-            </tr>
+                <tr>
+                    <td>{{product_name}}</td>
+                    <td>{{quantity}}</td>
+                    <td>{{product_price}}</td>
+                    <td>{{product_discount}}</td>
+                    <td>{{historyD_total}}</td>
+                    <td>{{date}}</td>
+                </tr>
             {{/each}}
             <tr>
                 <td><b>Total Yang Harus Di Bayar {{totalsemua}}</b></td>
