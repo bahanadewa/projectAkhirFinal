@@ -126,14 +126,16 @@ class CustomPaginationActionsTable extends React.Component {
   state = {
     rows: [],
     page: 0,
-    rowsPerPage: 10,
+    rowsPerPage: 15,
     edit : -1,
     ManageTransaction : [],
-    isDetail : false
+    isDetail : false,
+    search : ""
   };
   componentDidMount(){
       this.getData()
   }
+
 
   getData = () => {
     Axios.get(urlAPI + '/authVerify/GetDataManageTransaction')
@@ -180,8 +182,18 @@ class CustomPaginationActionsTable extends React.Component {
           <TableCell>{row.date}</TableCell>
           <TableCell>{formatMoney  (row.total)}</TableCell>
           <TableCell>
-               <input type='button' style={{borderRadius:"20px"}} className='btn btn-info' value='verify' onClick={()=>this.verify(row.id)} /> 
-               <input type='button' style={{borderRadius:"20px"}} className='btn btn-danger' value='decline' onClick={()=>this.decline(row.id)} /> 
+              {row.img_payment?
+                <div>
+                  <input type='button' style={{borderRadius:"20px"}} className='btn btn-info' value='verify' onClick={()=>this.verify(row.id)} /> 
+                  <input type='button' style={{borderRadius:"20px"}} className='btn btn-danger' value='decline' onClick={()=>this.decline(row.id)} /> 
+                </div>
+                :
+                <div>
+                  <input type='button' disabled style={{borderRadius:"20px"}} className='btn btn-info' value='verify'  /> 
+                  <input type='button' disabled style={{borderRadius:"20px"}} className='btn btn-danger' value='decline'  /> 
+                </div>
+              }
+               
           </TableCell>
         </TableRow>
       )
@@ -214,34 +226,40 @@ class CustomPaginationActionsTable extends React.Component {
     })
   }
 
+  getDataSearch=()=>{
+    var searchinput = this.refs.status.value
+    this.setState({search : searchinput})
+  }
 
-
-
-
-  render() {
-    const { classes } = this.props;
+  renderFilter=()=>{
     const { rows, rowsPerPage, page } = this.state;
-    const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
-    if(this.props.username){
-    return (
-        <div className='container'>
-            <Paper className={classes.root}>
-                <div className={classes.tableWrapper}>
-                <Table className={classes.table}>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell style={{fontSize:'24px', fontWeight:'600'}}>NO</TableCell>
-                            <TableCell style={{fontSize:'24px', fontWeight:'600'}}>USERNAME</TableCell>
-                            <TableCell style={{fontSize:'24px', fontWeight:'600'}}>TOTAL</TableCell>
-                            <TableCell style={{fontSize:'24px', fontWeight:'600'}}>DATE</TableCell>
-                            <TableCell style={{fontSize:'24px', fontWeight:'600'}}> INVOICE </TableCell>
-                            <TableCell style={{fontSize:'24px', fontWeight:'600'}}> STATUS</TableCell>
-                            <TableCell style={{fontSize:'24px', fontWeight:'600'}}></TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                    {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row,index) => (
-                        <TableRow key={row.id}>
+
+    if(this.state.search!==""){
+            var filter = this.state.rows.filter((val)=>{
+              return (val.status.includes(this.state.search)) 
+            })
+        
+            var cetak =  filter.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row,index) => {
+              return (
+                      <TableRow key={row.id}>
+                          <TableCell>{index+1}</TableCell>
+                          <TableCell>
+                              {row.username}
+                          </TableCell>
+                          <TableCell>{row.total}</TableCell>
+                          <TableCell>{row.date} </TableCell>
+                          <TableCell>{row.invoice_number} </TableCell>
+                          <TableCell>{row.status} </TableCell>
+            
+                          <TableCell><input type='button' value='Detail' onClick={()=>this.TrasactionDetail(row.id)} className='btn btn-danger mr-2' style={{borderRadius:"20px"}}/></TableCell>
+                      </TableRow>
+                  )
+              })
+              return cetak
+    }else if(this.state.search==""){
+          var cetak =  rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row,index) => {
+            return (
+                    <TableRow key={row.id}>
                         <TableCell>{index+1}</TableCell>
                         <TableCell>
                             {row.username}
@@ -250,47 +268,96 @@ class CustomPaginationActionsTable extends React.Component {
                         <TableCell>{row.date} </TableCell>
                         <TableCell>{row.invoice_number} </TableCell>
                         <TableCell>{row.status} </TableCell>
-  
+          
                         <TableCell><input type='button' value='Detail' onClick={()=>this.TrasactionDetail(row.id)} className='btn btn-danger mr-2' style={{borderRadius:"20px"}}/></TableCell>
-                        
-
-                        </TableRow>
-                    ))}
-                    {emptyRows > 0 && (
-                        <TableRow style={{ height: 48 * emptyRows }}>
-                        <TableCell colSpan={6} />
-                        </TableRow>
-                    )}
-                    </TableBody>
-                    <TableFooter>
-                    <TableRow>
-                        <TablePagination
-                        rowsPerPageOptions={[10, 20, 30]}
-                        colSpan={3}
-                        count={rows.length}
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        SelectProps={{
-                            native: true,
-                        }}
-                        onChangePage={this.handleChangePage}
-                        onChangeRowsPerPage={this.handleChangeRowsPerPage}
-                        ActionsComponent={TablePaginationActionsWrapped}
-                        />
                     </TableRow>
-                    </TableFooter>
-                </Table>
-                </div>
-            </Paper>
+                )
+            })
+            return cetak
+        }
+  }
+
+
+
+
+
+  render() {
+    const { classes } = this.props;
+    const { rows, rowsPerPage, page } = this.state;
+    const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+    
+    if(this.props.username){
+    return (
+        <div className='container'>
+          <div className="row">
+            <div className="col-md-10">
+                <Paper className={classes.root}>
+                    <div className={classes.tableWrapper}>
+                          <Table className={classes.table}>
+                              <TableHead>
+                                  <TableRow>
+                                      <TableCell style={{fontSize:'20px', fontWeight:'500'}}>NO</TableCell>
+                                      <TableCell style={{fontSize:'20px', fontWeight:'500'}}>USERNAME</TableCell>
+                                      <TableCell style={{fontSize:'20px', fontWeight:'500'}}>TOTAL</TableCell>
+                                      <TableCell style={{fontSize:'20px', fontWeight:'500'}}>DATE</TableCell>
+                                      <TableCell style={{fontSize:'20px', fontWeight:'500'}}> INVOICE </TableCell>
+                                      <TableCell style={{fontSize:'20px', fontWeight:'500'}}> STATUS</TableCell>
+                                      <TableCell style={{fontSize:'20px', fontWeight:'500'}}> ACTION </TableCell>
+                                  </TableRow>
+                              </TableHead>
+                              <TableBody>
+
+                              { 
+                                this.renderFilter()
+                              }
+
+                              {emptyRows > 0 && (
+                                  <TableRow style={{ height: 48 * emptyRows }}>
+                                  <TableCell colSpan={6} />
+                                  </TableRow>
+                              )}
+                              </TableBody>
+                              <TableFooter>
+                              <TableRow>
+                                  <TablePagination
+                                  rowsPerPageOptions={[10, 20, 30]}
+                                  colSpan={3}
+                                  count={rows.length}
+                                  rowsPerPage={rowsPerPage}
+                                  page={page}
+                                  SelectProps={{
+                                      native: true,
+                                  }}
+                                  onChangePage={this.handleChangePage}
+                                  onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                                  ActionsComponent={TablePaginationActionsWrapped}
+                                  />
+                              </TableRow>
+                              </TableFooter>
+                          </Table>
+                    </div>
+                </Paper>
+            </div>
+            <div className="col-md-2 mt-4">
+                <Paper>
+                      <select class="form-control" ref="status" onChange={()=>this.setState({search:this.refs.status.value})}>
+                              <option value=""> Pilih Status </option>
+                              <option value="BELUM BAYAR"> BELUM BAYAR </option>
+                              <option value="DIPROSES"> DIPROSES </option>
+                              <option value="DITOLAK"> DITOLAK </option>
+                      </select>
+                </Paper>
+            </div>
+          </div>
             { this.state.isDetail ? <Paper className='mt-3'>
               <Table>
                 <TableHead>
                 <TableRow>
-                    <TableCell style={{fontSize:'24px', fontWeight:'600'}}>NO</TableCell>
-                    <TableCell style={{fontSize:'24px', fontWeight:'600'}}>TRANSACTION IMG</TableCell>
-                    <TableCell style={{fontSize:'24px', fontWeight:'600'}}>DATE</TableCell>
-                    <TableCell style={{fontSize:'24px', fontWeight:'600'}}>TOTAL ITEM</TableCell>
-                    <TableCell style={{fontSize:'24px', fontWeight:'600'}}>ACTION</TableCell>
+                    <TableCell style={{fontSize:'23px', fontWeight:'500'}}>NO</TableCell>
+                    <TableCell style={{fontSize:'23px', fontWeight:'500'}}>TRANSACTION IMG</TableCell>
+                    <TableCell style={{fontSize:'23px', fontWeight:'500'}}>DATE</TableCell>
+                    <TableCell style={{fontSize:'23px', fontWeight:'500'}}>TOTAL ITEM</TableCell>
+                    <TableCell style={{fontSize:'23px', fontWeight:'500'}}>ACTION</TableCell>
                 </TableRow>                
                 </TableHead>
                 <TableBody>

@@ -56,7 +56,6 @@ module.exports={
             try{
                 if (err) throw err
                 res.send(result)
-                console.log(result)
             }catch{
                 if(err) res.send(err)
             }
@@ -70,7 +69,6 @@ module.exports={
             try{
                 if (err) throw err
                 res.send(result)
-                console.log(result)
             }catch{
                 if(err) res.send(err)
             }
