@@ -22,6 +22,7 @@ import { cartCount} from '../1 action'
 import PageNotFound from './404';
 import cookie from 'universal-cookie'
 import swal from 'sweetalert'
+import queryString from 'query-string'
 
 function formatMoney(number) {
     return number.toLocaleString('in-RP', { style: 'currency', currency: 'IDR' });
@@ -130,10 +131,11 @@ class CustomPaginationActionsTable extends React.Component {
     edit : -1,
     ManageTransaction : [],
     isDetail : false,
-    search : ""
+    searchh : "",
   };
   componentDidMount(){
       this.getData()
+      this.getDataUrl()
   }
 
 
@@ -226,17 +228,30 @@ class CustomPaginationActionsTable extends React.Component {
     })
   }
 
+ getDataUrl=()=>{
+    if(this.props.location.search){
+      var Obj = queryString.parse(this.props.location.search)
+      this.setState({searchh  : Obj.Managetransaction ? Obj.Managetransaction :""})
+    }
+}
   getDataSearch=()=>{
     var searchinput = this.refs.status.value
-    this.setState({search : searchinput})
+    this.setState({searchh : searchinput})
+    this.pushurl()
+  }
+
+  pushurl=()=>{
+    var newLink = `/Manage-transaction`
+    newLink+='?' + 'Managetransaction'+'='+this.refs.status.value
+    this.props.history.push(newLink)
   }
 
   renderFilter=()=>{
     const { rows, rowsPerPage, page } = this.state;
 
-    if(this.state.search!==""){
+    if(this.state.searchh!==""){
             var filter = this.state.rows.filter((val)=>{
-              return (val.status.includes(this.state.search)) 
+              return (val.status.includes(this.state.searchh)) 
             })
         
             var cetak =  filter.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row,index) => {
@@ -256,7 +271,7 @@ class CustomPaginationActionsTable extends React.Component {
                   )
               })
               return cetak
-    }else if(this.state.search==""){
+    }else if(this.state.searchh==""){
           var cetak =  rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row,index) => {
             return (
                     <TableRow key={row.id}>
@@ -281,6 +296,8 @@ class CustomPaginationActionsTable extends React.Component {
 
 
 
+
+
   render() {
     const { classes } = this.props;
     const { rows, rowsPerPage, page } = this.state;
@@ -291,7 +308,7 @@ class CustomPaginationActionsTable extends React.Component {
         <div className='container'>
                 <div style={{width:"300px", marginTop:"10px"}}>
                     <Paper>
-                          <select class="form-control" ref="status" onChange={()=>this.setState({search:this.refs.status.value})}>
+                          <select defaultValue={this.state.searchh} class="form-control" ref="status" onChange={this.getDataSearch}>
                                   <option value=""> SEMUA </option>
                                   <option value="BELUM BAYAR"> BELUM BAYAR </option>
                                   <option value="DIPROSES"> DIPROSES </option>

@@ -12,10 +12,12 @@ import queryString from 'query-string'
 
 class Product extends React.Component {
 
-    state = {listProduct : [], cart:[], listCategory : []}
+    state = {listProduct : [], cart:[], listCategory : [], search:""}
  
     componentDidMount(){
+        var Obj = queryString.parse(this.props.location.search)
         this.getDataCategory()
+        this.getDataUrl()
     }
 
     getDataCategory =()=> {
@@ -43,6 +45,24 @@ class Product extends React.Component {
                 this.setState({cart : res.data})
             })
             .catch ((err)=> console.log(err))
+        }
+        this.pushurl()
+    }
+
+    pushurl=()=>{
+        var newLink = `/category`
+        newLink+='?' + 'category'+'='+this.refs.category.value
+        this.props.history.push(newLink)
+      }
+
+    getDataUrl=()=>{
+        if(this.props.location.search){
+          var Obj = queryString.parse(this.props.location.search)
+          Axios.get(urlAPI+"/authCategory/getsearch/"+Obj.category)
+          .then((res) =>{
+              this.setState({cart : res.data, search : Obj.category ? Obj.category :""})
+          })
+          .catch ((err)=> console.log(err))
         }
     }
 
@@ -87,6 +107,14 @@ class Product extends React.Component {
         return jsx
     } 
 
+    alert=()=>{
+        alert(this.state.search)
+    }
+
+   
+      
+      
+
    
 
     render (){
@@ -94,13 +122,10 @@ class Product extends React.Component {
             <div className="container" >
                 <div className="row justify-content-center mt-5">
                     <div className="col-md-4">
-                        <select className='form-control' ref='category'>
-                            <option value="">PILIH KATEGORI</option>
+                        <select className='form-control' ref='category' onChange={this.search}>
+                            <option value="" >PILIH KATEGORI</option>
                             {this.renderListCategory()}
                         </select>
-                    </div>
-                    <div className="col-md-1">
-                        <input type="button" className="btn btn-info" value="search" onClick={this.search} />
                     </div>
                 </div>
                 <div className="row justify-content-center">
