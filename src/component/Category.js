@@ -94,7 +94,7 @@ class Product extends React.Component {
             <div className="container" >
                 <div className="row justify-content-center mt-5">
                     <div className="col-md-4">
-                        <select className='form-control form-control-sm' ref='category'>
+                        <select className='form-control' ref='category'>
                             <option value="">PILIH KATEGORI</option>
                             {this.renderListCategory()}
                         </select>

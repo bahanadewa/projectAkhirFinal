@@ -15,7 +15,8 @@ import {
   UncontrolledDropdown,
   DropdownToggle,
   DropdownMenu,
-  DropdownItem } from 'reactstrap';
+  DropdownItem ,
+  Badge} from 'reactstrap';
 ;
 
 const objCookie = new cookie ()
@@ -58,23 +59,13 @@ class MyNavbar extends Component {
                       <NavItem className="hover" style={{marginRight:"20px", marginLeft:"20px"}}>
                               <Link to="/about"><NavLink  style={{fontSize:"14px"}}>About </NavLink></Link>
                       </NavItem>
-                      {/* <NavItem className="hover" style={{marginRight:"20px", marginLeft:"20px"}}>
-                              <Link to="/our-menu"><NavLink  style={{fontSize:"14px"}}>Our Menu </NavLink></Link>
-                      </NavItem>  */}
+
                       <NavItem className="hover" style={{marginRight:"15px", marginLeft:"20px"}}>
                               <Link to="/category"><NavLink  style={{fontSize:"14px"}}> Category </NavLink></Link>
                       </NavItem> 
               </Nav>
   
               <Nav className="ml-auto" navbar>
-                      {/* <NavItem>
-                              <div className="input-group border-right " style={{width:"300px"}}>
-                                  <input type="text" ref="searchBook" className="form-control" placeholder="Search" style={{fontSize:"14px"}}/>
-                                  <div className="input-group-append mr-2">
-                                      <button className="btn border-secondary" type="button"><i className="fas fa-search" style={{color:"#A0B830"}} /></button>
-                                  </div>
-                              </div> 
-                      </NavItem> */}
                       <NavItem>
                               <Link to="/register"><NavLink className="btn btn-default border-secondary mr-1" style={{fontSize:"14px"}}><i className="fas fa-user-plus" /> Sign Up </NavLink></Link>
                       </NavItem>
@@ -100,9 +91,6 @@ class MyNavbar extends Component {
                       <NavItem className="hover" style={{marginRight:"15px", marginLeft:"20px"}}>
                               <Link to="/about"><NavLink  style={{fontSize:"14px"}}>About </NavLink></Link>
                       </NavItem>
-                      {/* <NavItem className="hover" style={{marginRight:"15px", marginLeft:"20px"}}>
-                              <Link to="/our-menu"><NavLink  style={{fontSize:"14px"}}>Our Menu </NavLink></Link>
-                      </NavItem>  */}
                       <NavItem className="hover" style={{marginRight:"15px", marginLeft:"20px"}}>
                               <Link to="/category"><NavLink  style={{fontSize:"14px"}}> Category </NavLink></Link>
                       </NavItem> 
@@ -110,20 +98,23 @@ class MyNavbar extends Component {
               </Nav>
   
               <Nav className="ml-auto" navbar>
-                      {/* <NavItem>
-                              <div className="input-group border-right" style={{width:"300px"}}>
-                                  <input type="text" ref="searchBook" className="form-control" placeholder="Search" style={{fontSize:"14px"}}/>
-                                  <div className="input-group-append mr-2">
-                                      <button className="btn border-secondary" type="button"><i className="fas fa-search" style={{color:"#A0B830"}} /></button>
-                                  </div>
-                              </div> 
-                      </NavItem> */}
-
                       <NavItem>
                               <NavLink>Hi !  {this.props.username} ({this.props.role})</NavLink>
                       </NavItem>
                       <NavItem>
-                              <Link to="/cart"><NavLink className="btn btn-default " style={{fontSize:"14px"}}><i class="fas fa-cart-arrow-down"></i >{this.props.cart} Cart </NavLink></Link>
+                              <Link to="/cart">
+                                    <NavLink className="btn btn-default " style={{fontSize:"14px"}}>
+                                        {this.props.cart !== 0 ?
+                                                <i class="fas fa-cart-arrow-down" style={{marginRight:"10px"}}>
+                                                      <Badge color="danger" style={{position:"absolute",top:"2px", height:"20px", width:"25px", borderRadius:"20px"}} > <center>{this.props.cart}</center>  </Badge>
+                                                </i >
+                                                :
+                                                <i class="fas fa-cart-arrow-down" style={{marginRight:"10px"}}>
+                                                      <Badge  style={{position:"absolute",top:"2px", height:"20px", width:"25px", borderRadius:"20px", backgroundColor:"transparent"}} > <center>{this.props.cart}</center>  </Badge>
+                                                </i >
+                                        }
+                                    </NavLink>
+                              </Link>
                       </NavItem>
                       <UncontrolledDropdown nav inNavbar style={{fontSize:"14px", fontWeight:"500"}} >
                                                 <DropdownToggle nav caret >

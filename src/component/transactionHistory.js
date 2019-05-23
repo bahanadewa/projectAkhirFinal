@@ -1,4 +1,5 @@
 import React from 'react';
+import {withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -14,13 +15,14 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import { connect} from 'react-redux'
-import { Link } from 'react-router-dom'
 import Axios from 'axios';
 import { urlAPI } from '../support/url-API';
 import { TableHead } from '@material-ui/core';
 import { cartCount} from '../1 action'
 import PageNotFound from './404';
 import cookie from 'universal-cookie'
+import swal from 'sweetalert'
+import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 function formatMoney(number) {
     return number.toLocaleString('in-RP', { style: 'currency', currency: 'IDR' });
@@ -119,8 +121,8 @@ const styles = theme => ({
   },
 });
 
-var objcookie = new cookie
 
+var objcookie = new cookie
 class CustomPaginationActionsTable extends React.Component {
   state = {
     rows: [],
@@ -128,7 +130,11 @@ class CustomPaginationActionsTable extends React.Component {
     rowsPerPage: 5,
     edit : -1,
     historyDetail : [],
-    isDetail : false
+    isDetail : false,
+    selecctedFile : null,
+    isEdit : false,
+    modaldata : {},
+    search : ""
   };
   componentDidMount(){
       this.getData()
@@ -151,9 +157,6 @@ class CustomPaginationActionsTable extends React.Component {
     this.setState({ page: 0, rowsPerPage: event.target.value });
   };
 
-  onBtnDetail = (item) => {
-
-  }
 
   historyDetail=(id)=>{
     Axios.get(urlAPI +'/authCheckout/showhistorydetail/'+id)
@@ -184,6 +187,105 @@ class CustomPaginationActionsTable extends React.Component {
   }
 
 
+
+  onChangeHendler = (event) => {
+    this.setState({selecctedFile : event.target.files[0]})
+  }
+  valueHandler = () => {
+      var value = this.state.selecctedFile ? this.state.selecctedFile.name : 'Pick a Picture'
+      return value
+  }
+
+  modal =(row)=>{
+    this.setState({isEdit:true, modaldata : row})
+  }
+
+
+  addData = ()=>{
+    var username = this.state.modaldata.username
+    var id = this.state.modaldata.id
+    if(this.state.selecctedFile){
+        var fd = new FormData()
+        fd.append('payment_verification', this.state.selecctedFile, this.state.selecctedFile.name)  
+        Axios.put(urlAPI+'/authVerify/payment-verified?username='+username+"&id="+id, fd)
+
+            .then ((res)=> {
+                if(res.data.error){
+                    alert(res.data.msg)
+                }else{
+                    swal('Menunggu persetujuan',' UPLOAD SUCCESS','success')
+                    this.setState({isEdit : false})
+                    this.getData()
+                }
+            }) 
+            .catch((err)=>{
+                console.log(err)
+            })
+    }else{
+        swal('Pilih Bukti Pembayaran','','warning')
+    }     
+}
+
+  renderFilter=()=>{
+    const { rows, rowsPerPage, page } = this.state;
+
+    if(this.state.search!==""){
+            var filter = this.state.rows.filter((val)=>{
+              return (val.status.includes(this.state.search)) 
+            })
+        
+            var cetak =  filter.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row,index) => {
+              return (
+                    <TableRow key={row.id}>
+                            <TableCell>{index+1}</TableCell>
+                            <TableCell>
+                                {row.username}
+                            </TableCell>
+                            <TableCell>{formatMoney (row.total)}</TableCell>
+                            <TableCell>{row.date} </TableCell>
+                            <TableCell>{row.invoice_number} </TableCell>
+                            <TableCell>{row.status} </TableCell>
+                            <TableCell>
+                                <div>
+                                    <input type='button' value='Upload File' onClick={()=>this.modal(row)} style={{backgroundColor:"#ba719b",width:"80px", height:"35px" ,borderRadius:"20px", border:"solid transparent"}}/>  
+                                </div>
+                            </TableCell>
+
+                            <TableCell><input type='button' value='Detail' onClick={()=>this.historyDetail(row.id)} style={{backgroundColor:"#71baaa",width:"80px", height:"35px" ,borderRadius:"20px", border:"solid transparent"}}/></TableCell>
+                    </TableRow>
+                  )
+              })
+              return cetak
+    }else if(this.state.search==""){
+          var cetak =  rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row,index) => {
+            return (
+              <TableRow key={row.id}>
+                        <TableCell>{index+1}</TableCell>
+                        <TableCell>
+                            {row.username}
+                        </TableCell>
+                        <TableCell>{formatMoney (row.total)}</TableCell>
+                        <TableCell>{row.date} </TableCell>
+                        <TableCell>{row.invoice_number} </TableCell>
+                        <TableCell>{row.status} </TableCell>
+                        <TableCell>
+                            <div>
+                                <input type='button' value='Upload File' onClick={()=>this.modal(row)} style={{backgroundColor:"#ba719b",width:"80px", height:"35px" ,borderRadius:"20px", border:"solid transparent"}}/>  
+                            </div>
+                        </TableCell>
+
+                        <TableCell><input type='button' value='Detail' onClick={()=>this.historyDetail(row.id)} style={{backgroundColor:"#71baaa",width:"80px", height:"35px" ,borderRadius:"20px", border:"solid transparent"}}/></TableCell>
+              </TableRow>
+                )
+            })
+            return cetak
+        }
+  }
+
+
+
+// ================================================== RENDER ===========================================
+
   render() {
     const { classes } = this.props;
     const { rows, rowsPerPage, page } = this.state;
@@ -191,6 +293,16 @@ class CustomPaginationActionsTable extends React.Component {
     if(this.props.username){
     return (
         <div className='container'>
+              <div style={{width:"300px", marginTop:"10px"}}>
+                  <Paper>
+                        <select class="form-control" ref="status" onChange={()=>this.setState({search:this.refs.status.value})}>
+                                <option value=""> Pilih Status </option>
+                                <option value="BELUM BAYAR"> BELUM BAYAR </option>
+                                <option value="DIPROSES"> DIPROSES </option>
+                                <option value="DITOLAK"> DITOLAK </option>
+                        </select>
+                  </Paper>
+              </div>
             <Paper className={classes.root}>
                 <div className={classes.tableWrapper}>
                 <Table className={classes.table}>
@@ -202,24 +314,18 @@ class CustomPaginationActionsTable extends React.Component {
                             <TableCell style={{fontSize:'24px', fontWeight:'600'}}>DATE</TableCell>
                             <TableCell style={{fontSize:'24px', fontWeight:'600'}}> INVOICE </TableCell>
                             <TableCell style={{fontSize:'24px', fontWeight:'600'}}> STATUS</TableCell>
+                            <TableCell style={{fontSize:'24px', fontWeight:'600'}}>UPLOAD</TableCell>
+                            <TableCell style={{fontSize:'24px', fontWeight:'600'}}></TableCell>
                             <TableCell style={{fontSize:'24px', fontWeight:'600'}}></TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                    {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row,index) => (
-                        <TableRow key={row.id}>
-                        <TableCell>{index+1}</TableCell>
-                        <TableCell>
-                            {row.username}
-                        </TableCell>
-                        <TableCell>{formatMoney (row.total)}</TableCell>
-                        <TableCell>{row.date} </TableCell>
-                        <TableCell>{row.invoice_number} </TableCell>
-                        <TableCell>{row.status} </TableCell>
-                        <TableCell><input type='button' value='Detail' onClick={()=>this.historyDetail(row.id)} className='btn btn-danger mr-2'/></TableCell>
 
-                        </TableRow>
-                    ))}
+                    {
+                        this.renderFilter()
+                    }
+
+
                     {emptyRows > 0 && (
                         <TableRow style={{ height: 48 * emptyRows }}>
                         <TableCell colSpan={6} />
@@ -246,6 +352,35 @@ class CustomPaginationActionsTable extends React.Component {
                 </Table>
                 </div>
             </Paper>
+
+
+
+{/* ============================================== MODAL UPLOAD ============================================== */}
+            <Modal isOpen={this.state.isEdit} toggle={()=>this.setState({isEdit: false})} className={this.props.className}>
+                <ModalHeader toggle={()=>this.setState({isEdit: false})}>UPLOAD YOUR PROOF OF PAYMENT </ModalHeader>
+
+                <ModalBody>
+                            <div>
+                                <input style={{display : 'none'}} ref = 'input' type = 'file' onChange={this.onChangeHendler}/>   
+                                <input className = 'form-control btn-success' onClick={()=>this.refs.input.click()} type = 'button' value ={this.valueHandler()}  />
+                            </div>
+                </ModalBody>
+
+                <ModalFooter>
+                            <div>
+                                <input type= 'button' onClick={()=>this.addData()} value ="Upload" style={{backgroundColor:"#ba719b",width:"80px", height:"35px" ,borderRadius:"20px", border:"solid transparent",margin:"10px"}} />
+                                <input  type = 'button' onClick={()=>this.setState({isEdit: false,selecctedFile:null})} value ="Cancel" style={{backgroundColor:"red",width:"80px", height:"35px" ,borderRadius:"20px", border:"solid transparent",margin:"10px"}}/>
+                            </div>
+                </ModalFooter>
+              </Modal>
+
+
+
+
+
+
+{/* ============================================== DETAIL HISTORY ============================================== */}
+
             { this.state.isDetail ? <Paper className='mt-3'>
               <Table>
                 <TableHead>
@@ -278,6 +413,10 @@ CustomPaginationActionsTable.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
+
+
+
+
 const mapStateToProps = (state) => {
     return {
         id : state.user.id,
@@ -286,4 +425,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps,{cartCount})(withStyles(styles)(CustomPaginationActionsTable));
+export default withRouter (connect(mapStateToProps,{cartCount})(withStyles(styles)(CustomPaginationActionsTable)));

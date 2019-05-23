@@ -20,7 +20,6 @@ import ScrollToTop from './component/ScrollToTop'
 import Footer from './component/Footer'
 import Addproduct from './component/AddProductAdmin'
 import ManageCategory from './component/ManageCategory'
-import VerivyPayment from './component/VerifyPayment'
 import ManageTransaction from './component/ManageTrasaction'
 import Category from './component/Category'
 
@@ -58,7 +57,6 @@ class App extends Component {
                       <Route path="/manage-category" component ={ManageCategory} exact/>
                       <Route path="/about" component ={About} exact/>
                       <Route path="/transaction-history" component ={History} exact/>
-                      <Route path="/Verify-payment" component ={VerivyPayment} exact/>
                       <Route path="/Manage-transaction" component ={ManageTransaction} exact/>
                       <Route path="/category" component ={Category} exact/>
                       <Route path='*' component={PageNotFound} exact />      

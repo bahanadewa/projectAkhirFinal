@@ -93,7 +93,7 @@ module.exports={
                                                                 from : 'FoodQoma <purwadhika@purwadhika.com>',
                                                                 to : to ,
                                                                 subject: 'INVOICE' ,
-                                                                html : `<h1> <a href="http://localhost:3000/Verify-payment"> Upload Your payment here </a> </h1>`,
+                                                                html : ``,
                                                                 attachments :  [
                                                                     {
                                                                         filename : 'invoice.pdf',

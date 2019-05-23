@@ -126,7 +126,7 @@ class CustomPaginationActionsTable extends React.Component {
   state = {
     rows: [],
     page: 0,
-    rowsPerPage: 15,
+    rowsPerPage: 10,
     edit : -1,
     ManageTransaction : [],
     isDetail : false,
@@ -289,8 +289,16 @@ class CustomPaginationActionsTable extends React.Component {
     if(this.props.username){
     return (
         <div className='container'>
-          <div className="row">
-            <div className="col-md-10">
+                <div style={{width:"300px", marginTop:"10px"}}>
+                    <Paper>
+                          <select class="form-control" ref="status" onChange={()=>this.setState({search:this.refs.status.value})}>
+                                  <option value=""> Pilih Status </option>
+                                  <option value="BELUM BAYAR"> BELUM BAYAR </option>
+                                  <option value="DIPROSES"> DIPROSES </option>
+                                  <option value="DITOLAK"> DITOLAK </option>
+                          </select>
+                    </Paper>
+                </div>
                 <Paper className={classes.root}>
                     <div className={classes.tableWrapper}>
                           <Table className={classes.table}>
@@ -337,18 +345,7 @@ class CustomPaginationActionsTable extends React.Component {
                           </Table>
                     </div>
                 </Paper>
-            </div>
-            <div className="col-md-2 mt-4">
-                <Paper>
-                      <select class="form-control" ref="status" onChange={()=>this.setState({search:this.refs.status.value})}>
-                              <option value=""> Pilih Status </option>
-                              <option value="BELUM BAYAR"> BELUM BAYAR </option>
-                              <option value="DIPROSES"> DIPROSES </option>
-                              <option value="DITOLAK"> DITOLAK </option>
-                      </select>
-                </Paper>
-            </div>
-          </div>
+
             { this.state.isDetail ? <Paper className='mt-3'>
               <Table>
                 <TableHead>

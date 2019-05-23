@@ -38,6 +38,10 @@ renderErrorMessage=()=>{
         return <div class="alert alert-danger mt-5" role="alert">
                     {this.props.error}
                 </div>
+    }else if (this.state.error){
+        return <div class="alert alert-danger mt-5" role="alert">
+                    {this.state.error}
+                </div>
     }
 }
 
@@ -47,14 +51,14 @@ SignUp =()=>{
     var email = this.refs.email.value
     var phone = this.refs.phone.value
 
-    if (username ==="" || password ==="" || email === "" ||phone===""){
+    if (username ==="" || password ==="" || email ==="" ||phone===""){
         this.setState({error : 'harus di isi semua'})
     } else {
         if(validator.isEmail(`${email}`)){
             this.props.register_signup(username,password,email,phone)
             this.props.history.push('/login')
         }else{
-            alert('email tidak sesuai')
+            this.setState({error : 'email tidak sesuai'})
         }
     }
 }
