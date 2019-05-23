@@ -110,7 +110,7 @@ class MyNavbar extends Component {
                                                 </i >
                                                 :
                                                 <i class="fas fa-cart-arrow-down" style={{marginRight:"10px"}}>
-                                                      <Badge  style={{position:"absolute",top:"2px", height:"20px", width:"25px", borderRadius:"20px", backgroundColor:"transparent"}} > <center>{this.props.cart}</center>  </Badge>
+                                                      <Badge  style={{position:"absolute",top:"2px", height:"20px", width:"25px", borderRadius:"20px", backgroundColor:"transparent", color:"none"}} > <center>{this.props.cart}</center>  </Badge>
                                                 </i >
                                         }
                                     </NavLink>

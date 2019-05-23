@@ -6,17 +6,13 @@ const objCookie = new cookies()
 
 export const login =(paramsUserName,paramsPassword)=>{
     return (dispatch)=>{
-
         dispatch({
             type: "LOADING", 
         })
 
         axios.get(urlAPI+'/authLogin/getuserlogin?username='+paramsUserName+'&password='+paramsPassword)
-        //ketika berhasil terhubung kem daabase makan lanjut ke then
         .then((res) => {
             console.log(res)
-
-        // IF USERNAME DAN PASSWORD SESUAI MAKA RES.DATA ADA ISINYA
             if(res.data.length > 0){
                 if(res.data[0].verified===0){
                     dispatch(
@@ -39,7 +35,6 @@ export const login =(paramsUserName,paramsPassword)=>{
                     payload : ['','Username not Found']
                 })
             }
-            
         })
         .catch((err) => {
             dispatch({
@@ -98,8 +93,6 @@ export const register_signup = (a,b,c,d) =>{
                 .then((res) => {
                         dispatch({
                             type : 'LOGIN_SUCCESS-1',
-                            //Mengirim Payload dalam bentuk Object
-                            //payload : { username : newData.username, id : res.data.id, email : c} 
                             payload : a
                             },
                             // Parameter Ketiga agar cookie bisa diakses di semua komponen
