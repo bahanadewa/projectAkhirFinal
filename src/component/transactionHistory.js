@@ -321,6 +321,7 @@ class CustomPaginationActionsTable extends React.Component {
                                 <option value=""> SEMUA </option>
                                 <option value="BELUM BAYAR"> BELUM BAYAR </option>
                                 <option value="DIPROSES"> DIPROSES </option>
+                                <option value="DISETUJUI"> DISETUJUI </option>
                                 <option value="DITOLAK"> DITOLAK </option>
                         </select>
                   </Paper>

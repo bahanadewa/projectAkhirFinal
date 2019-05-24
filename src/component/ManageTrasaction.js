@@ -103,6 +103,11 @@ TablePaginationActions.propTypes = {
   theme: PropTypes.object.isRequired,
 };
 
+
+
+
+
+
 const TablePaginationActionsWrapped = withStyles(actionsStyles, { withTheme: true })(
   TablePaginationActions,
 );
@@ -182,7 +187,7 @@ class CustomPaginationActionsTable extends React.Component {
             }
           </TableCell>
           <TableCell>{row.date}</TableCell>
-          <TableCell>{formatMoney  (row.total)}</TableCell>
+          <TableCell>{formatMoney (row.total)}</TableCell>
           <TableCell>
               {row.img_payment?
                 <div>
@@ -261,7 +266,7 @@ class CustomPaginationActionsTable extends React.Component {
                           <TableCell>
                               {row.username}
                           </TableCell>
-                          <TableCell>{row.total}</TableCell>
+                          <TableCell>{formatMoney (row.total)}</TableCell>
                           <TableCell>{row.date} </TableCell>
                           <TableCell>{row.invoice_number} </TableCell>
                           <TableCell>{row.status} </TableCell>
@@ -279,7 +284,7 @@ class CustomPaginationActionsTable extends React.Component {
                         <TableCell>
                             {row.username}
                         </TableCell>
-                        <TableCell>{row.total}</TableCell>
+                        <TableCell>{formatMoney (row.total)}</TableCell>
                         <TableCell>{row.date} </TableCell>
                         <TableCell>{row.invoice_number} </TableCell>
                         <TableCell>{row.status} </TableCell>
@@ -312,6 +317,7 @@ class CustomPaginationActionsTable extends React.Component {
                                   <option value=""> SEMUA </option>
                                   <option value="BELUM BAYAR"> BELUM BAYAR </option>
                                   <option value="DIPROSES"> DIPROSES </option>
+                                  <option value="DISETUJUI"> DISETUJUI </option>
                                   <option value="DITOLAK"> DITOLAK </option>
                           </select>
                     </Paper>
