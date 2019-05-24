@@ -63,5 +63,17 @@ module.exports={
                 res.send('Edit Data Sukses')
             })
         }
+    },
+    deleteproductbyid : (req,res)=>{
+        var id = req.params.id
+        var sql = `delete from product where id = ${id}`
+        try{
+            db.query(sql,(err,result)=>{
+                if (err) throw err
+                res.send(result)
+            })
+        }catch (err){
+                send.res(err)
+        }
     }
 }

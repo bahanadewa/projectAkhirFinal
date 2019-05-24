@@ -219,6 +219,9 @@ class CustomPaginationActionsTable extends React.Component {
   }
 
 
+
+// ================================================== RENDER ===========================================
+
   render() {
     const { classes } = this.props;
     const { rows, rowsPerPage, page } = this.state;

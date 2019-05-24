@@ -113,6 +113,10 @@ class Category extends React.Component{
         return data
     }
 
+
+
+// ================================================== RENDER ===========================================
+
     render(){
         return(
             <div className="container">

@@ -24,7 +24,7 @@ module.exports={
             try{
                 if (err) throw err
                 var sql1 = `select c.id, c.product_username, c.product_id ,p.product_name, p.product_price, p.product_discount, c.product_quantity from cart as c
-                join product as p on c.product_id = p.id where c.product_username = "${data.username}";`
+                left join product as p on c.product_id = p.id where c.product_username = "${data.username}";`
                 db.query(sql1,(err1,result1)=>{
                     if (err1) throw err1
                     var sql2 = `select id from history where username='${data.username}' and date='${data.date}'`
@@ -32,8 +32,11 @@ module.exports={
                         if (err2) throw err2
                         var id = result2[0].id
                         var newArr = []
+    
                         result1.map((val) => {
-                            newArr.push(`(${id},${val.product_id},${val.product_quantity},${(val.product_price-(val.product_price*(val.product_discount/100)))*val.product_quantity})`)
+                            if(val.product_name!==null){
+                                newArr.push(`(${id},${val.product_id},${val.product_quantity},${(val.product_price-(val.product_price*(val.product_discount/100)))*val.product_quantity})`)
+                            }
                         })
                         var sql3 = `insert into history_detail (id_history, id_product, quantity, total) VALUES ${newArr.join(',')}`
                         db.query(sql3, (err3, result3) => {

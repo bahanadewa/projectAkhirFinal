@@ -17,7 +17,11 @@ import './support/fontawesome-free/css/all.min.css';
 
 const global_state = createStore(Reducer,{},applyMiddleware(ReduxThunk))
 
-ReactDOM.render(<Provider store={global_state}><BrowserRouter><App/></BrowserRouter></Provider>, document.getElementById('root'));
+ReactDOM.render(<Provider store={global_state}>
+                        <BrowserRouter>
+                            <App/>
+                        </BrowserRouter>
+                </Provider>, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

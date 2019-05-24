@@ -164,8 +164,13 @@ class CustomPaginationActionsTable extends React.Component {
     this.setState({ page });
   };
 
+
+
+
+
+
   onBtnDelete = (id)=>{
-        Axios.delete(urlAPI+'/product-menu/'+id)
+        Axios.delete(urlAPI+'/authProduct/deleteproduct/'+id)
         .then((res)=>{
             this.getDataApi()
         })
@@ -336,6 +341,10 @@ class CustomPaginationActionsTable extends React.Component {
 
 // =========================================== BATAS AKHIR FUNCTION ===============================================
 
+
+
+
+// ================================================== RENDER ===========================================
 
   render() {
     const { classes } = this.props;

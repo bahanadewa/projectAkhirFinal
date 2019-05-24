@@ -65,7 +65,9 @@ class Login extends React.Component{
         }
     }
 
-   
+  
+// ================================================== RENDER ===========================================
+
     render(){
         if(this.props.username !==""){
             return<Redirect to = '/'/>

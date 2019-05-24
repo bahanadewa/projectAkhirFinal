@@ -126,6 +126,8 @@ class Product extends React.Component {
 
    
 
+// ================================================== RENDER ===========================================
+
     render (){
         return (
             <div className="container">

@@ -71,6 +71,8 @@ class ProductDetail extends React.Component{
         })
     }
 
+// ================================================== RENDER ===========================================
+
     render(){
         var {product_name, product_img,product_serving,product_calories,product_fat,product_protein,product_carb,product_fiber,product_category,product_price,product_discount,product_description,id_product} = this.state.productname
         return(

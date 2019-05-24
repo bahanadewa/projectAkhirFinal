@@ -301,7 +301,7 @@ class CustomPaginationActionsTable extends React.Component {
 
 
 
-
+// ================================================== RENDER ===========================================
 
   render() {
     const { classes } = this.props;

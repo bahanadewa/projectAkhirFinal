@@ -43,6 +43,9 @@ class Product extends React.Component {
     } 
 
    
+
+    // ================================================== RENDER ===========================================
+
     render (){
 
         const settings = {

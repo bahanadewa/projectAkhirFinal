@@ -43,6 +43,8 @@ class MyNavbar extends Component {
 }
   
 
+// ================================================== RENDER ===========================================
+
   render() {
     if (this.props.username ===""){
       return (
